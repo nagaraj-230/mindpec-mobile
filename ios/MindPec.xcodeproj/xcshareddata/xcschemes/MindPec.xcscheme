@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "MindPec.app"
-               BlueprintName = "MindPec"
-               ReferencedContainer = "container:MindPec.xcodeproj">
+               BuildableName = "mindpec.app"
+               BlueprintName = "mindpec"
+               ReferencedContainer = "container:mindpec.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "MindPecTests.xctest"
-               BlueprintName = "MindPecTests"
-               ReferencedContainer = "container:MindPec.xcodeproj">
+               BuildableName = "mindpecTests.xctest"
+               BlueprintName = "mindpecTests"
+               ReferencedContainer = "container:mindpec.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "MindPec.app"
-            BlueprintName = "MindPec"
-            ReferencedContainer = "container:MindPec.xcodeproj">
+            BuildableName = "mindpec.app"
+            BlueprintName = "mindpec"
+            ReferencedContainer = "container:mindpec.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "MindPec.app"
-            BlueprintName = "MindPec"
-            ReferencedContainer = "container:MindPec.xcodeproj">
+            BuildableName = "mindpec.app"
+            BlueprintName = "mindpec"
+            ReferencedContainer = "container:mindpec.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
