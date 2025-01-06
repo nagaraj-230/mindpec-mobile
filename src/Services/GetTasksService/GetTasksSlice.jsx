@@ -18,7 +18,7 @@ export const GetTasksThunk = createAsyncThunk(
     dispatch(setIsLoading(true));
     try {
       const response = await getTasksApi(action.payload);
-        console.log('getTasks ' + JSON.stringify(response));
+        // console.log('getTasks ' + JSON.stringify(response));
       dispatch(setIsLoading(false));
       return response.data;
     } catch (error) {
@@ -36,7 +36,7 @@ export const UpdateTasksThunk = createAsyncThunk(
     dispatch(setIsLoading(true));
     try {
       const response = await updateTasksApi(action.payload);
-      //   console.log('getTasks ' + JSON.stringify(response));
+        // console.log('getTasks ' + JSON.stringify(response));
       dispatch(setIsLoading(false));
       return response.data;
     } catch (error) {

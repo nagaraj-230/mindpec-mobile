@@ -22,24 +22,57 @@ import {useFocusEffect} from '@react-navigation/native';
 import LoadingComponent from '../../Components/LoadingComponent';
 import {setIsLoading} from '../../Services/LoginService/LoginSlice';
 import {GetCatogeroiesThnuk} from '../../Services/CategeoriesService/GetCategoriesSlice';
+import { GetClaimsThunk } from '../../Services/GetClaimsService/GetClaimsSlice';
 
 const DashBoardScreen = ({route, navigation}) => {
   const {userName} = route.params || {userName: ''}; // Retrieve userName from route params
 
   const dispatch = useDispatch();
   const {taskStatusData, isLoading} = useSelector(state => state.getTaskStatus);
-  console.log('taskStatusData', taskStatusData);
-  const {catogriesData} = useSelector(state => state.getCatogeroies);
-  // console.log('catogriesData', catogriesData);
-  const [userNameState, setUserNameState] = useState(userName); // Initialize state to hold userName
-  const [cateData, setCateData] = useState([]);
+  // console.log('taskStatusData', taskStatusData);
+  const {tasksData} = useSelector(state => state.getTasks);
+  const {getClaimsData} = useSelector(state => state.getClaims);
+  const totalClaims = getClaimsData?.length || 0;
 
   const [dashboardData, setDashboardData] = useState([]);
+  const [taskCounts, setTaskCounts] = useState({});
+  const [userNameState, setUserNameState] = useState(userName);
+
+  useEffect(() => {
+    if (taskStatusData) {
+      setDashboardData(taskStatusData); // Sync local state with Redux
+    }
+  }, [taskStatusData]);
+
+  
+  // Calculate Task Counts
+  useEffect(() => {
+    if (tasksData && taskStatusData) {
+      const counts = taskStatusData.reduce((acc, status) => {
+        // Skip counting for Claims
+        if (status.TaskStatusID === 7) {
+          acc[status.TaskStatusID] = null; // Do not show count for Claims
+          return acc;
+        }
+
+        const count = tasksData.filter(
+          task =>
+            task.TaskStatusID === status.TaskStatusID &&
+            task.TaskStatusName === status.TaskStatusName,
+        ).length;
+
+        acc[status.TaskStatusID] = count;
+        return acc;
+      }, {});
+
+      setTaskCounts(counts);
+    }
+  }, [tasksData, taskStatusData]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const getUserData = await getData('user');
-      console.log('getUserData:', getUserData);
+      // console.log('getUserData:', getUserData);
       if (getUserData) {
         setUserNameState(getUserData.UserName); // Set userName from stored data
       }
@@ -47,12 +80,6 @@ const DashBoardScreen = ({route, navigation}) => {
 
     fetchUserData(); // Call the function to fetch user data on mount
   }, []);
-
-  useEffect(() => {
-    if (taskStatusData) {
-      setDashboardData(taskStatusData); // Sync local state with Redux
-    }
-  }, [taskStatusData]);
 
   useEffect(() => {
     const backAction = () => {
@@ -70,50 +97,93 @@ const DashBoardScreen = ({route, navigation}) => {
   useEffect(() => {
     getTaskStatusList();
     getCatogeroies();
+    getTasksList();
+    fetchClaims();
   }, []);
 
   const getTaskStatusList = async () => {
     const getUserData = await getData('user');
-    console.log('getUserData:', getUserData);
+    // console.log('getUserData:', getUserData);
     const LoginUserID = getUserData?.LoginUserID;
     // const token = await getData('token');
     // console.log('Token:', token);
 
     const payload = {TaskStatusID: 0, AppUserID: LoginUserID};
-    console.log('dashpayLoad', payload);
+    // console.log('dashpayLoad', payload);
     await dispatch(GetTaskStatusThunk({payload}));
   };
 
   const getCatogeroies = async () => {
     const payload = {CategoryID: 0};
     const response = await dispatch(GetCatogeroiesThnuk({payload}));
-    console.log('responseCato', response);
+    // console.log('responseCato', response);
   };
+
   const iconMapping = {
     1: {icon: 'edit', color: '#FFA500'},
     2: {icon: 'hourglass-empty', color: '#1E90FF'},
     3: {icon: 'folder', color: '#FF8C00'},
     4: {icon: 'check-circle', color: '#32CD32'},
     5: {icon: 'search', color: '#6A5ACD'},
+    6: {icon: 'priority-high', color: '#6A5ACD'},
   };
 
   const updatedTaskStatusData = [
     ...(dashboardData || []),
     {
-      TaskStatusID: 6,
+      TaskStatusID: 7,
       TaskStatusName: 'Claims',
       icon: 'attach-money',
       color: '#FF4500',
     },
+    // {
+    //   TaskStatusID: 8,
+    //   TaskStatusName: 'Overdew Items',
+    //   icon: 'warning',
+    //   color: '#FF4500',
+    // },
   ];
 
+  const getTasksList = async () => {
+    setIsLoading(true);
+    const getUserData = await getData('user');
+    const LoginUserID = getUserData?.LoginUserID;
+    const CompanyID = getUserData?.CompanyID;
+
+    // const payload = {TaskID: 0, LoginUserID: LoginUserID};
+    const payload = {
+      TaskID: 0,
+      CompanyID: CompanyID,
+      ClientID: 1,
+      AppUserID: LoginUserID,
+    };
+
+    // console.log('GetTasksPayload', payload);
+    const response = await dispatch(GetTasksThunk({payload}));
+    // console.log('GetTasksThunk Response:', response.payload);
+  };
+
+  const fetchClaims = async () => {
+    const userData = await getData('user');
+    const payload = {
+      ClaimID: 0,
+      CompanyID: userData?.CompanyID,
+      ClaimUserID: userData?.LoginUserID,
+      ClaimDate: '',
+      AppUserID: userData?.LoginUserID,
+    };
+
+    // Dispatch the GetClaimsThunk action
+    const response = await dispatch(GetClaimsThunk({payload}));
+    // console.log('GetClaimsThunkResponse',response)
+  };
+
   const handleCardPress = (id, title) => {
-    if (id === 6) {
+    if (id === 7) {
       navigation.navigate('claims');
     } else {
-      navigation.navigate('tasklistscreen', {id, title,});
+      navigation.navigate('tasklistscreen', {id, title});
       // navigation.navigate('catoscreen', {id, title,});
-
     }
   };
 
@@ -122,6 +192,11 @@ const DashBoardScreen = ({route, navigation}) => {
     await clearData();
     navigation.navigate('login');
   };
+
+  const filteredTaskStatusData = updatedTaskStatusData.filter(
+    item =>
+      !(item.TaskStatusID === 7 && taskCounts[item.TaskStatusID] === null),
+  );
 
   return (
     <View style={styles.container}>
@@ -155,46 +230,85 @@ const DashBoardScreen = ({route, navigation}) => {
           {/* Task Status Cards */}
           <View style={styles.innerContainer}>
             <FlatList
-              data={updatedTaskStatusData}
+              data={filteredTaskStatusData}
               renderItem={({item}) => {
                 const {icon, color} = iconMapping[item.TaskStatusID] || {
                   icon: item.icon,
                   color: item.color,
                 };
+                const count = taskCounts[item.TaskStatusID]; // Get count for each status
+
                 return (
                   <TouchableOpacity
-                    style={[styles.card, {backgroundColor: 'white'}]}
+                    style={styles.card}
                     onPress={() =>
                       handleCardPress(item.TaskStatusID, item.TaskStatusName)
                     }
-                    activeOpacity={0.8}>
-                    {/* <View
-                      style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: '#FF6A00',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        borderRadius: 15,
-                        top: 5,
-                        right: 5,
-                        shadowColor: '#000',
-                        shadowOffset: {width: 0, height: 1},
-                        shadowOpacity: 0.2,
-                        shadowRadius: 3,
-                        elevation: 2,
-                      }}>
-                      <Text style={styles.countText}>5</Text>
-                    </View> */}
+                    activeOpacity={0.9}>
+                    {/* Count Badge */}
+                    {count !== null && (
+                      <View style={styles.countBadge}>
+                        {item.TaskStatusID === 7 ? (
+                          // Show totalClaims for Claims card
+                          <Text style={styles.countText}>{totalClaims}</Text>
+                        ) : (
+                          // Show count for other cards
+                          <Text style={styles.countText}>{count}</Text>
+                        )}
+                      </View>
+                    )}
+
+                    {/* Task Name */}
+                    <Text style={styles.cardText}>{item.TaskStatusName}</Text>
+
+                    {/* Icon */}
                     <View
                       style={[styles.iconContainer, {backgroundColor: color}]}>
-                      <Icon name={icon} size={30} color={colors.white} />
+                      <Icon name={icon} size={24} color={colors.white} />
                     </View>
-                    <Text style={styles.cardText}>{item.TaskStatusName}</Text>
                   </TouchableOpacity>
                 );
               }}
+              // renderItem={({item}) => {
+              //   const {icon, color} = iconMapping[item.TaskStatusID] || {
+              //     icon: item.icon,
+              //     color: item.color,
+              //   };
+              //   return (
+              //     <TouchableOpacity
+              //       style={[styles.card, {backgroundColor: 'white'}]}
+              //       onPress={() =>
+              //         handleCardPress(item.TaskStatusID, item.TaskStatusName)
+              //       }
+              //       activeOpacity={0.8}>
+              //       <View
+              //         style={{
+              //           width: 30,
+              //           height: 30,
+              //           backgroundColor: '#FF6A00',
+              //           justifyContent: 'center',
+              //           alignItems: 'center',
+              //           position: 'absolute',
+              //           borderRadius: 15,
+              //           top: 5,
+              //           right: 5,
+              //           shadowColor: '#000',
+              //           shadowOffset: {width: 0, height: 1},
+              //           shadowOpacity: 0.2,
+              //           shadowRadius: 3,
+              //           elevation: 2,
+              //         }}>
+              //         <Text style={styles.countText}>5</Text>
+              //       </View>
+              //       <Text style={styles.cardText}>{item.TaskStatusName}</Text>
+
+              //       <View
+              //         style={[styles.iconContainer, {backgroundColor: color}]}>
+              //         <Icon name={icon} size={30} color={colors.white} />
+              //       </View>
+              //     </TouchableOpacity>
+              //   );
+              // }}
               keyExtractor={item => item.TaskStatusID.toString()}
               numColumns={2}
               columnWrapperStyle={styles.row}
