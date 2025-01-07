@@ -22,7 +22,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import LoadingComponent from '../../Components/LoadingComponent';
 import {setIsLoading} from '../../Services/LoginService/LoginSlice';
 import {GetCatogeroiesThnuk} from '../../Services/CategeoriesService/GetCategoriesSlice';
-import { GetClaimsThunk } from '../../Services/GetClaimsService/GetClaimsSlice';
+import {GetClaimsThunk} from '../../Services/GetClaimsService/GetClaimsSlice';
 
 const DashBoardScreen = ({route, navigation}) => {
   const {userName} = route.params || {userName: ''}; // Retrieve userName from route params
@@ -44,7 +44,6 @@ const DashBoardScreen = ({route, navigation}) => {
     }
   }, [taskStatusData]);
 
-  
   // Calculate Task Counts
   useEffect(() => {
     if (tasksData && taskStatusData) {
@@ -97,8 +96,8 @@ const DashBoardScreen = ({route, navigation}) => {
   useEffect(() => {
     getTaskStatusList();
     getCatogeroies();
-    getTasksList();
-    fetchClaims();
+    // getTasksList();
+    // fetchClaims();
   }, []);
 
   const getTaskStatusList = async () => {
@@ -197,6 +196,7 @@ const DashBoardScreen = ({route, navigation}) => {
     item =>
       !(item.TaskStatusID === 7 && taskCounts[item.TaskStatusID] === null),
   );
+  console.log('Filtered Data:', filteredTaskStatusData);
 
   return (
     <View style={styles.container}>
@@ -231,12 +231,40 @@ const DashBoardScreen = ({route, navigation}) => {
           <View style={styles.innerContainer}>
             <FlatList
               data={filteredTaskStatusData}
+              // renderItem={({item}) => {
+              //   const count = taskCounts[item.TaskStatusID];
+
+              //   return (
+              //     <TouchableOpacity
+              //       style={styles.card}
+              //       onPress={() =>
+              //         handleCardPress(item.TaskStatusID, item.TaskStatusName)
+              //       }
+              //       activeOpacity={0.9}>
+              //       {/* Task Name */}
+              //       <Text style={styles.taskText}>{item.TaskStatusName}</Text>
+
+              //       {/* Task Count with Counter Box */}
+              //       {count !== null && (
+              //         <View style={styles.countContainer}>
+              //           <View style={styles.countBox}>
+              //             <Text style={styles.countNumber}>
+              //               {item.TaskStatusID === 7 ? totalClaims : count}
+              //               {/* {count} */}
+              //             </Text>
+              //           </View>
+              //         </View>
+              //       )}
+              //     </TouchableOpacity>
+              //   );
+              // }}
+
               renderItem={({item}) => {
                 const {icon, color} = iconMapping[item.TaskStatusID] || {
                   icon: item.icon,
                   color: item.color,
                 };
-                const count = taskCounts[item.TaskStatusID]; // Get count for each status
+                const count = taskCounts[item.TaskStatusID]; 
 
                 return (
                   <TouchableOpacity
@@ -250,10 +278,14 @@ const DashBoardScreen = ({route, navigation}) => {
                       <View style={styles.countBadge}>
                         {item.TaskStatusID === 7 ? (
                           // Show totalClaims for Claims card
-                          <Text style={styles.countText}>{totalClaims}</Text>
+                          // <Text style={styles.countText}>{totalClaims}</Text>
+                          <Text style={styles.countText}>{1}</Text>
+
                         ) : (
                           // Show count for other cards
-                          <Text style={styles.countText}>{count}</Text>
+                          // <Text style={styles.countText}>{count}</Text>
+                          <Text style={styles.countText}>{1}</Text>
+
                         )}
                       </View>
                     )}
@@ -269,46 +301,6 @@ const DashBoardScreen = ({route, navigation}) => {
                   </TouchableOpacity>
                 );
               }}
-              // renderItem={({item}) => {
-              //   const {icon, color} = iconMapping[item.TaskStatusID] || {
-              //     icon: item.icon,
-              //     color: item.color,
-              //   };
-              //   return (
-              //     <TouchableOpacity
-              //       style={[styles.card, {backgroundColor: 'white'}]}
-              //       onPress={() =>
-              //         handleCardPress(item.TaskStatusID, item.TaskStatusName)
-              //       }
-              //       activeOpacity={0.8}>
-              //       <View
-              //         style={{
-              //           width: 30,
-              //           height: 30,
-              //           backgroundColor: '#FF6A00',
-              //           justifyContent: 'center',
-              //           alignItems: 'center',
-              //           position: 'absolute',
-              //           borderRadius: 15,
-              //           top: 5,
-              //           right: 5,
-              //           shadowColor: '#000',
-              //           shadowOffset: {width: 0, height: 1},
-              //           shadowOpacity: 0.2,
-              //           shadowRadius: 3,
-              //           elevation: 2,
-              //         }}>
-              //         <Text style={styles.countText}>5</Text>
-              //       </View>
-              //       <Text style={styles.cardText}>{item.TaskStatusName}</Text>
-
-              //       <View
-              //         style={[styles.iconContainer, {backgroundColor: color}]}>
-              //         <Icon name={icon} size={30} color={colors.white} />
-              //       </View>
-              //     </TouchableOpacity>
-              //   );
-              // }}
               keyExtractor={item => item.TaskStatusID.toString()}
               numColumns={2}
               columnWrapperStyle={styles.row}
@@ -321,3 +313,42 @@ const DashBoardScreen = ({route, navigation}) => {
 };
 
 export default DashBoardScreen;
+
+// renderItem={({item}) => {
+//   // const {icon, color} = iconMapping[item.TaskStatusID] || {
+//   //   icon: item.icon,
+//   //   color: item.color,
+//   // };
+//   const count = taskCounts[item.TaskStatusID]; // Get count for each status
+
+//   return (
+//     <TouchableOpacity
+//       style={styles.card}
+//       onPress={() =>
+//         handleCardPress(item.TaskStatusID, item.TaskStatusName)
+//       }
+//       activeOpacity={0.9}>
+//       {/* Count Badge */}
+//       {count !== null && (
+//         <View style={styles.countBadge}>
+// {item.TaskStatusID === 7 ? (
+//   // Show totalClaims for Claims card
+//   <Text style={styles.countText}>{totalClaims}</Text>
+// ) : (
+//   // Show count for other cards
+//   <Text style={styles.countText}>{count}</Text>
+// )}
+//         </View>
+//       )}
+
+//       {/* Task Name */}
+//       <Text style={styles.cardText}>{item.TaskStatusName}</Text>
+
+//       {/* Icon */}
+//       {/* <View
+//         style={[styles.iconContainer, {backgroundColor: color}]}>
+//         <Icon name={icon} size={24} color={colors.white} />
+//       </View>  */}
+//     </TouchableOpacity>
+//   );
+// }}

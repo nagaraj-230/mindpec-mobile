@@ -124,62 +124,22 @@ export const styles = StyleSheet.create({
   },
 
   // card design
-  // card: {
-  //   width: '45%',
-  //   height: 150,
-  //   marginVertical: 10,
-  //   borderRadius: 15,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: colors.white,
-  //   shadowColor: '#000',
-  //   shadowOffset: {width: 0, height: 2},
-  //   shadowOpacity: 0.2,
-  //   shadowRadius: 10,
-  //   elevation: 3,
-  //   transform: [{scale: 1}],
-  //   transition: 'transform 0.3s ease',
-  // },
-  // iconContainer: {
-  //   width: 50,
-  //   height: 50,
-  //   borderRadius: 10,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   backgroundColor: 'rgba(0, 0, 0, 0.1)',
-  //   // marginBottom: 15,
-  // },
-  // cardText: {
-  //   fontSize: 16,
-  //   fontWeight: '600',
-  //   color: colors.darkText,
-  //   textAlign: 'center',
-  //   marginBottom: 15,
-  // },
-  // countText: {
-  //   position: 'absolute',
-  //   fontSize: 14,
-  //   fontWeight: '600',
-  //   color: colors.white,
-  //   textAlign: 'center',
-  // },
-
   card: {
-    width: '42%', // Adjusted for compact layout
-    height: 140, // Reduced height for a smaller look
-    marginVertical: 10,
-    borderRadius: 15,
+    width: '43%',
+    height: 130, // Adjusted height for balance
+    marginVertical: 15, // Slightly increased margin for spacious feel
+    borderRadius: 15, // Softer rounded corners
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.white,
+    backgroundColor: colors.white, // Clean white background
+    elevation: 2, // Subtle elevation for depth
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-    padding: 10,
+    shadowRadius: 8,
+    padding: 20, // Generous padding for a clean and spacious layout
     borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.05)',
+    borderColor: 'rgba(0,0,0,0.05)', // Soft border for structure
   },
   iconContainer: {
     width: 45,
@@ -196,6 +156,7 @@ export const styles = StyleSheet.create({
     color: '#333',
     textAlign: 'center',
   },
+
   countBadge: {
     position: 'absolute',
     top: 10,
@@ -214,4 +175,56 @@ export const styles = StyleSheet.create({
     color: colors.white,
     textAlign: 'center',
   },
+  // card: {
+  //   width: '45%',
+  //   height: 130, // Adjusted height for balance
+  //   marginVertical: 15, // Slightly increased margin for spacious feel
+  //   borderRadius: 15, // Softer rounded corners
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: colors.white, // Clean white background
+  //   elevation: 2, // Subtle elevation for depth
+  //   shadowColor: '#000',
+  //   shadowOffset: {width: 0, height: 4},
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 8,
+  //   padding: 20, // Generous padding for a clean and spacious layout
+  //   borderWidth: 1,
+  //   borderColor: 'rgba(0,0,0,0.05)', // Soft border for structure
+  // },
+
+  // taskText: {
+  //   fontSize: 16, // Larger font size for better readability
+  //   fontWeight: 'bold', // Bold task name for emphasis
+  //   color: '#333', // Dark text for contrast
+  //   textAlign: 'center',
+  //   marginBottom: 10, // Space between task name and count
+  // },
+
+  // countContainer: {
+  //   alignItems: 'center',
+  //   marginTop: 10, // Balanced spacing
+  // },
+
+  // countBox: {
+  //   backgroundColor: '#FF4500', // Counter box background (dynamic color)
+  //   height: 30,
+  //   width: 30,
+  //   // paddingHorizontal: 12, // Padding for the counter box
+  //   // paddingVertical: 6, // Padding for the counter box
+  //   borderRadius: 20, // Rounded corners for the box
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
+
+  // countNumber: {
+  //   fontSize: 18, // Slightly larger count number
+  //   fontWeight: '700', // Heavy font for the count number
+  //   color: '#fff', // White color for contrast against the orange box
+  //   textAlign: 'center',
+  // },
+
+  // row: {
+  //   justifyContent: 'space-between',
+  // },
 });
