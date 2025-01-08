@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  BackHandler,
+  SafeAreaView,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,21 +24,32 @@ const TaskListScreen = ({route, navigation}) => {
   const {tasksData} = useSelector(state => state.getTasks);
   const isLoader = useSelector(state => state.login.isLoader);
   const [localTasks, setLocalTasks] = useState([]);
-  console.log('localTasks', localTasks);
+  // console.log('localTasks', localTasks);
 
   const [isLoading, setIsLoading] = useState(true); // Local loading state
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      getTasksList(); 
+      getTasksList();
     });
 
-    return unsubscribe; 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        navigation.goBack();
+        return true;
+      },
+    );
+
+    return () => {
+      unsubscribe(); // Cleanup navigation listener
+      backHandler.remove(); // Cleanup back button listener
+    };
   }, [navigation]);
 
   // useEffect(() => {
   //   if (tasksData) {
-  //     setLocalTasks(tasksData); 
+  //     setLocalTasks(tasksData);
   //     setIsLoading(false);
   //   }
   // }, [tasksData]);
@@ -42,7 +61,7 @@ const TaskListScreen = ({route, navigation}) => {
         task => task.TaskStatusID === id && task.TaskStatusName === title,
       );
 
-      setLocalTasks(filteredTasks); 
+      setLocalTasks(filteredTasks);
       setIsLoading(false);
     }
   }, [tasksData, id, title]);
@@ -93,20 +112,15 @@ const TaskListScreen = ({route, navigation}) => {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'flex-start',
               alignItems: 'center',
               marginBottom: 5,
-              // backgroundColor:'cyan'
             }}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Text style={styles.taskName}>{item.TaskName}</Text>
-              <Text
-                style={[
-                  styles.taskName,
-                  {left: 10},
-                ]}>{`[ ${item.CategoryName} ]`}</Text>
-            </View>
+            <Text style={styles.taskName}>{item.TaskName}</Text>
+            <Text style={[styles.taskName, {marginLeft: 10}]}>
+              {`[ ${item.CategoryName} ]`}
+            </Text>
           </View>
+
           <Text style={styles.infoText}>
             <Text style={styles.label}>Date: </Text>
             {dayjs(item.TaskCreationDate).format('YYYY-MM-DD')}
@@ -130,7 +144,7 @@ const TaskListScreen = ({route, navigation}) => {
                 styles.priorityBadge,
                 {
                   backgroundColor:
-                    priorityColors[item.PriorityName] || '#58d68d', 
+                    priorityColors[item.PriorityName] || '#58d68d',
                 },
               ]}>
               <Text style={styles.badgeText}>
@@ -141,7 +155,7 @@ const TaskListScreen = ({route, navigation}) => {
               style={[
                 styles.statusBadge,
                 {
-                  backgroundColor: statusColors[item.StatusName] || '#58d68d', 
+                  backgroundColor: statusColors[item.StatusName] || '#58d68d',
                 },
               ]}>
               <Text style={styles.badgeText}>
@@ -194,39 +208,41 @@ const TaskListScreen = ({route, navigation}) => {
     );
   };
   return (
-    <View style={styles.container}>
-      {isLoading ? (
-        <LoadingComponent />
-      ) : (
-        <>
-          <LinearGradient
-            colors={['#FF6A00', '#FF9500']}
-            style={styles.gradientHeader}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}>
-            <View style={styles.headerContainer}>
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={styles.backButton}>
-                <Icon name="arrow-back" size={24} color="#FFF" />
-              </TouchableOpacity>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        {isLoading ? (
+          <LoadingComponent />
+        ) : (
+          <>
+            <LinearGradient
+              colors={['#FF6A00', '#FF9500']}
+              style={styles.gradientHeader}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}>
+              <View style={styles.headerContainer}>
+                <TouchableOpacity
+                  onPress={() => navigation.goBack()}
+                  style={styles.backButton}>
+                  <Icon name="arrow-back" size={24} color="#FFF" />
+                </TouchableOpacity>
 
-              <View style={styles.centerContainer}>
-                <Text style={styles.headerText}>{title}</Text>
+                <View style={styles.centerContainer}>
+                  <Text style={styles.headerText}>{title}</Text>
+                </View>
               </View>
-            </View>
-          </LinearGradient>
+            </LinearGradient>
 
-          <FlatList
-            data={localTasks}
-            renderItem={renderItem}
-            keyExtractor={item => item.TaskID.toString()}
-            contentContainerStyle={styles.taskList}
-            ListEmptyComponent={noRenderData}
-          />
-        </>
-      )}
-    </View>
+            <FlatList
+              data={localTasks}
+              renderItem={renderItem}
+              keyExtractor={item => item.TaskID.toString()}
+              contentContainerStyle={styles.taskList}
+              ListEmptyComponent={noRenderData}
+            />
+          </>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 

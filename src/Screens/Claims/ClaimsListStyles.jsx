@@ -1,5 +1,10 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import {colors} from '../../Assets/colors';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
 
 export const styles = StyleSheet.create({
   container: {
@@ -49,21 +54,23 @@ export const styles = StyleSheet.create({
   },
 
   cardContainer: {
-    marginBottom: 12, // Reduced margin for compactness
+    // marginBottom: 12,
+    marginBottom: responsiveHeight(1.5),
     borderRadius: 10,
     overflow: 'hidden',
-    elevation: 4, // Slightly reduced elevation for subtle shadow
+    elevation: 4,
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.05, // Reduced shadow opacity for subtler effect
+    shadowOpacity: 0.05,
     shadowRadius: 3,
   },
 
   gradientCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10, // Reduced padding for tighter content
+    // padding: 10,
+    padding: responsiveHeight(1),
     borderRadius: 10,
   },
 
@@ -74,34 +81,36 @@ export const styles = StyleSheet.create({
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    // marginBottom: 8,
+    marginBottom: responsiveHeight(0.8),
     flexWrap: 'wrap',
   },
   columnItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 12,
+    // marginRight: 12,
+    marginRight: responsiveWidth(3),
   },
-  infoText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#333',
-    marginLeft: 6,
-  },
+
   // iconSpacing: {
   //   marginLeft: 16,
   // },
   actionSection: {
     flex: 1,
-    justifyContent: 'center', // Center actions vertically
+    justifyContent: 'center',
     alignItems: 'center',
   },
 
   statusBadge: {
     alignSelf: 'flex-start',
-    marginTop: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+    // marginTop: 4,
+    // paddingVertical: 4,
+    // paddingHorizontal: 10,
+
+    marginTop: responsiveHeight(0.5),
+    paddingVertical: responsiveHeight(0.5),
+    paddingHorizontal: responsiveWidth(2.5),
+
     borderRadius: 5,
   },
 
@@ -116,33 +125,43 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-evenly',
-    alignItems: 'center', 
+    alignItems: 'center',
     width: '100%',
     height: 'auto',
-    marginTop: 6,
   },
 
   iconButton: {
     backgroundColor: '#FF6A00',
     borderRadius: 20,
-    padding: 8,
+    // padding: 8,
+    padding: responsiveWidth(2),
     elevation: 4,
-    marginBottom: 12, 
   },
 
   // ---------
-
+  addclaimContainer: {
+    width: '100%',
+    paddingHorizontal: 15,
+    marginTop: '5%',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
   addClaimButton: {
     borderRadius: 10,
-    overflow: 'hidden', 
-    elevation: 5, 
+    overflow: 'hidden',
+    elevation: 5,
   },
   addClaimGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 10,
+    // paddingVertical: 8,
+    // paddingHorizontal: 10,
+
+    paddingVertical: responsiveHeight(0.8),
+    paddingHorizontal: responsiveWidth(2),
+
     borderRadius: 10,
     shadowColor: '#000', // iOS shadow
     shadowOffset: {width: 0, height: 2},
@@ -153,61 +172,20 @@ export const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: '700',
     fontSize: 16,
-    marginLeft: 8, 
-    letterSpacing: 0.5, 
+    // marginLeft: 8,
+    marginLeft: responsiveWidth(2),
+    letterSpacing: 0.5,
   },
   taskList: {
-    padding: 15,
-  },
-
-  taskContainer: {
-    marginBottom: 20,
-    borderRadius: 12,
-    overflow: 'hidden',
-    elevation: 6,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4},
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-  },
-
-  taskName: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#333',
-    marginBottom: 5,
-  },
-  iconWrapper: {
-    width: 35, 
-    height: 35, 
-    borderRadius: 8, 
-    backgroundColor: colors.lightbg, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2, 
-    borderColor: '#FF6A00', 
-    marginRight: 10, 
-    shadowColor: '#000', 
-    shadowOffset: {width: 0, height: 4},
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3, 
-  },
-  cardLabel: {
-    fontWeight: 'bold',
-    color: colors.txtcolor,
+    // padding: 15,
+    padding: responsiveHeight(1.5),
   },
   infoText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333', 
+    color: '#333',
     marginTop: 3,
     marginLeft: 8,
-  },
-
-  row: {
-    flexDirection: 'row',
   },
 
   // modal style props
@@ -223,7 +201,7 @@ export const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     width: '90%',
@@ -238,8 +216,10 @@ export const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   modalHeader: {
-    paddingVertical: 20,
-    paddingHorizontal: 15,
+    // paddingVertical: 20,
+    // paddingHorizontal: 15,
+    paddingVertical: responsiveHeight(2),
+    paddingHorizontal: responsiveWidth(1.5),
     alignItems: 'center',
   },
   modalTitle: {
@@ -250,13 +230,15 @@ export const styles = StyleSheet.create({
   },
   modalBody: {
     flex: 1,
-    padding: 20,
+    // padding: 20,
+    padding: responsiveWidth(4.5),
   },
   detailRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    // marginBottom: 15,
+    marginBottom: responsiveHeight(1),
   },
   label: {
     fontSize: 16,
@@ -271,16 +253,20 @@ export const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: '#E0E0E0',
-    marginVertical: 10,
+    // marginVertical: 10,
+    marginVertical: responsiveHeight(1.3),
   },
   closeButton: {
     backgroundColor: '#FF6A00',
     borderRadius: 50,
-    paddingVertical: 12,
+    // paddingVertical: 12,
+    paddingVertical: responsiveHeight(1.5),
     alignItems: 'center',
     justifyContent: 'center',
-    marginHorizontal: 20,
-    marginBottom: 20,
+    // marginHorizontal: 20,
+    // marginBottom: 20,
+    marginHorizontal: responsiveWidth(4),
+    marginBottom: responsiveHeight(2),
   },
   closeButtonText: {
     fontSize: 16,
@@ -291,8 +277,11 @@ export const styles = StyleSheet.create({
 
   // Status Badge Styling
   modalStatusBadge: {
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    // paddingVertical: 5,
+    // paddingHorizontal: 10,
+    paddingVertical: responsiveHeight(0.5),
+    paddingHorizontal: responsiveWidth(2.5),
+
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
@@ -308,11 +297,11 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     color: '#333',
-    marginTop: 5,
-    paddingHorizontal: 10, 
-    lineHeight: 22, 
-    maxHeight: 100, 
-    overflow: 'hidden', 
-    textAlignVertical: 'top', 
+    // marginTop: 5,
+    // marginTop: responsiveHeight(0.5),
+    lineHeight: 22,
+    maxHeight: 100,
+    overflow: 'hidden',
+    textAlignVertical: 'top',
   },
 });

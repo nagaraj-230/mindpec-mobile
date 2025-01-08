@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  BackHandler,
+  SafeAreaView,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -15,6 +23,20 @@ const TaskHistoryScreen = ({route, navigation}) => {
   // Select the task history data from Redux
   const {getTaskHistroyData} = useSelector(state => state.getTaskStatusHistory);
   console.log('Redux Data:', getTaskHistroyData);
+
+  // useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     () => {
+  //       navigation.goBack();
+  //       return true;
+  //     },
+  //   );
+
+  //   return () => {
+  //     backHandler.remove();
+  //   };
+  // }, [navigation]);
 
   useEffect(() => {
     getTaskStatusHistroy();
@@ -63,33 +85,35 @@ const TaskHistoryScreen = ({route, navigation}) => {
   );
 
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={['#FF6A00', '#FF9500']}
-        style={styles.gradientHeader}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#FFF" />
-          </TouchableOpacity>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <LinearGradient
+          colors={['#FF6A00', '#FF9500']}
+          style={styles.gradientHeader}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              <Icon name="arrow-back" size={24} color="#FFF" />
+            </TouchableOpacity>
 
-          <View style={styles.centerContainer}>
-            <Text style={styles.headerText}>Task History</Text>
+            <View style={styles.centerContainer}>
+              <Text style={styles.headerText}>Task History</Text>
+            </View>
           </View>
-        </View>
-      </LinearGradient>
+        </LinearGradient>
 
-      <FlatList
-        data={historyData}
-        renderItem={renderItem}
-        keyExtractor={item => item.TaskStatusHistoryID.toString()}
-        ItemSeparatorComponent={() => <View style={styles.divider} />} // Divider between items
-        contentContainerStyle={styles.listContainer}
-      />
-    </View>
+        <FlatList
+          data={historyData}
+          renderItem={renderItem}
+          keyExtractor={item => item.TaskStatusHistoryID.toString()}
+          ItemSeparatorComponent={() => <View style={styles.divider} />} // Divider between items
+          contentContainerStyle={styles.listContainer}
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 

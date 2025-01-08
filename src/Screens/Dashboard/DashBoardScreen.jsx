@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   BackHandler,
+  SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -199,6 +200,7 @@ const DashBoardScreen = ({route, navigation}) => {
   console.log('Filtered Data:', filteredTaskStatusData);
 
   return (
+    <SafeAreaView style={{flex:1}}>
     <View style={styles.container}>
       {isLoading ? (
         <LoadingComponent />
@@ -231,40 +233,12 @@ const DashBoardScreen = ({route, navigation}) => {
           <View style={styles.innerContainer}>
             <FlatList
               data={filteredTaskStatusData}
-              // renderItem={({item}) => {
-              //   const count = taskCounts[item.TaskStatusID];
-
-              //   return (
-              //     <TouchableOpacity
-              //       style={styles.card}
-              //       onPress={() =>
-              //         handleCardPress(item.TaskStatusID, item.TaskStatusName)
-              //       }
-              //       activeOpacity={0.9}>
-              //       {/* Task Name */}
-              //       <Text style={styles.taskText}>{item.TaskStatusName}</Text>
-
-              //       {/* Task Count with Counter Box */}
-              //       {count !== null && (
-              //         <View style={styles.countContainer}>
-              //           <View style={styles.countBox}>
-              //             <Text style={styles.countNumber}>
-              //               {item.TaskStatusID === 7 ? totalClaims : count}
-              //               {/* {count} */}
-              //             </Text>
-              //           </View>
-              //         </View>
-              //       )}
-              //     </TouchableOpacity>
-              //   );
-              // }}
-
               renderItem={({item}) => {
                 const {icon, color} = iconMapping[item.TaskStatusID] || {
                   icon: item.icon,
                   color: item.color,
                 };
-                const count = taskCounts[item.TaskStatusID]; 
+                const count = taskCounts[item.TaskStatusID];
 
                 return (
                   <TouchableOpacity
@@ -280,18 +254,22 @@ const DashBoardScreen = ({route, navigation}) => {
                           // Show totalClaims for Claims card
                           // <Text style={styles.countText}>{totalClaims}</Text>
                           <Text style={styles.countText}>{1}</Text>
-
                         ) : (
                           // Show count for other cards
                           // <Text style={styles.countText}>{count}</Text>
                           <Text style={styles.countText}>{1}</Text>
-
                         )}
                       </View>
                     )}
 
                     {/* Task Name */}
-                    <Text style={styles.cardText}>{item.TaskStatusName}</Text>
+
+                    <Text
+                      style={styles.cardText}
+                      numberOfLines={2}
+                      ellipsizeMode="tail">
+                      {item.TaskStatusName}
+                    </Text>
 
                     {/* Icon */}
                     <View
@@ -304,15 +282,45 @@ const DashBoardScreen = ({route, navigation}) => {
               keyExtractor={item => item.TaskStatusID.toString()}
               numColumns={2}
               columnWrapperStyle={styles.row}
+              showsVerticalScrollIndicator={false}
             />
           </View>
         </>
       )}
     </View>
+    </SafeAreaView>
   );
 };
 
 export default DashBoardScreen;
+
+// renderItem={({item}) => {
+//   const count = taskCounts[item.TaskStatusID];
+
+//   return (
+//     <TouchableOpacity
+//       style={styles.card}
+//       onPress={() =>
+//         handleCardPress(item.TaskStatusID, item.TaskStatusName)
+//       }
+//       activeOpacity={0.9}>
+//       {/* Task Name */}
+//       <Text style={styles.taskText}>{item.TaskStatusName}</Text>
+
+//       {/* Task Count with Counter Box */}
+//       {count !== null && (
+//         <View style={styles.countContainer}>
+//           <View style={styles.countBox}>
+//             <Text style={styles.countNumber}>
+//               {item.TaskStatusID === 7 ? totalClaims : count}
+//               {/* {count} */}
+//             </Text>
+//           </View>
+//         </View>
+//       )}
+//     </TouchableOpacity>
+//   );
+// }}
 
 // renderItem={({item}) => {
 //   // const {icon, color} = iconMapping[item.TaskStatusID] || {

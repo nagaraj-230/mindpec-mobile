@@ -4,10 +4,12 @@ import {
   Text,
   StyleSheet,
   Dimensions,
+  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   TextInput,
   Alert,
+  BackHandler,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
@@ -53,6 +55,23 @@ const TaskListInfoScreen = ({route, navigation}) => {
   // remarks
   const [remarks, setRemarks] = useState('');
   const [errors, setErrors] = useState({remarks: '', date: ''}); // Track validation errors
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {});
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        navigation.goBack();
+        return true;
+      },
+    );
+
+    return () => {
+      unsubscribe(); // Cleanup navigation listener
+      backHandler.remove(); // Cleanup back button listener
+    };
+  }, [navigation]);
 
   console.log('remarks', remarks);
   const toggleEdit = () => {
@@ -114,9 +133,9 @@ const TaskListInfoScreen = ({route, navigation}) => {
     return true;
   };
 
-  useEffect(() => {
-    fetchGetTaskAssignment();
-  }, []);
+  // useEffect(() => {
+  //   fetchGetTaskAssignment();
+  // }, []);
 
   //getTaskAssignmetThunk call
   const fetchGetTaskAssignment = async () => {
@@ -177,7 +196,7 @@ const TaskListInfoScreen = ({route, navigation}) => {
         TaskAssignmentUserID: LoginUserID,
         // TaskAssignmentID:24,
         // TaskAssignmentUserID: 6,
- 
+
         StatusDate: dayjs(date).format('YYYY-MM-DD'),
         Remarks: remarks,
         // Remarks: 'Task Status History Update',
@@ -217,263 +236,269 @@ const TaskListInfoScreen = ({route, navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <LinearGradient
-        colors={['#FF6A00', '#FF9500']}
-        style={styles.gradientHeader}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#FFF" />
-          </TouchableOpacity>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        {/* Header */}
+        <LinearGradient
+          colors={['#FF6A00', '#FF9500']}
+          style={styles.gradientHeader}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              <Icon name="arrow-back" size={24} color="#FFF" />
+            </TouchableOpacity>
 
-          <View style={styles.centerContainer}>
-            <Text style={styles.headerText}>Task Details</Text>
+            <View style={styles.centerContainer}>
+              <Text style={styles.headerText}>Task Details</Text>
+            </View>
           </View>
-        </View>
-      </LinearGradient>
+        </LinearGradient>
 
-      {/* Main Content */}
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-        {isEditable ? (
-          <>
-            {/* Task Name */}
-            <View
-              style={{
-                flexDirection: 'row',
-                // backgroundColor: 'cyan',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                width: '100%',
-                height: '20%',
-              }}>
-              <View>
-                <Text style={[styles.taskName, {width: '100%'}]}>
-                  {taskName}
-                </Text>
-              </View>
-              <View
-                style={{
-                  padding: 10,
-                  backgroundColor: colors.btncolor,
-                  borderRadius: 8,
-                  justifyContent: 'center',
-                  width: 'auto',
-                }}>
-                <Text style={[styles.titleName, {width: '100%'}]}>{title}</Text>
-              </View>
-            </View>
-
-            {/* Description */}
-            <View style={[styles.infoContainer, {marginTop: '3%'}]}>
-              <Text style={styles.label}>Description:</Text>
-              <TextInput
-                style={styles.input}
-                value={description}
-                onChangeText={setDescription}
-                placeholder="Enter description"
-                editable={false}
-              />
-            </View>
-
-            {/* Remarks Input */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Remarks</Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  styles.textArea,
-                  errors.remarks ? {borderColor: 'red'} : {},
-                ]}
-                placeholder="Enter Remarks"
-                placeholderTextColor={colors.txtcolor}
-                value={remarks}
-                onChangeText={handleRemarksChange}
-                multiline
-                onBlur={validateRemarks}
-              />
-              {errors.remarks ? (
-                <Text style={{color: 'red', fontSize: 12}}>
-                  {errors.remarks}
-                </Text>
-              ) : null}
-            </View>
-
-            {/* Date Picker */}
-            <View>
+        {/* Main Content */}
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          {isEditable ? (
+            <>
+              {/* Task Name */}
               <View
                 style={{
                   flexDirection: 'row',
+                  // backgroundColor: 'cyan',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  justifyContent: 'flex-start',
+                  width: '100%',
+                  height: '20%',
                 }}>
-                <Text style={styles.datePickerLabel}>Update Date:</Text>
-                <TouchableOpacity onPress={() => setIsPickerOpen(true)}>
-                  <Text style={[styles.datePickerLabel, {marginRight: 0}]}>
-                    {' '}
-                    {/* {dayjs(date).format('YYYY-MM-DD')} */}
-                    {date === 'Select Date'
-                      ? 'Select Date'
-                      : dayjs(date).format('YYYY-MM-DD')}
+                <View>
+                  <Text style={[styles.taskName, {width: '100%'}]}>
+                    {taskName}
                   </Text>
-                </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    padding: 10,
+                    backgroundColor: colors.btncolor,
+                    borderRadius: 8,
+                    justifyContent: 'center',
+                    width: 'auto',
+                  }}>
+                  <Text style={[styles.titleName, {width: '100%'}]}>
+                    {title}
+                  </Text>
+                </View>
               </View>
 
-              {isPickerOpen && (
-                <DateTimePicker
-                  mode="single"
-                  // date={date || new Date()}
-                  date={date instanceof Date ? date : new Date()}
-                  onChange={handleDateChange}
-                  onCancel={handleCancel}
-                  selectedItemColor="#4C17A9"
-                  minDate={new Date('2023-12-11')} // Allow selection of the previous day and today
-                  maxDate={new Date()} // Don't allow future dates
+              {/* Description */}
+              <View style={[styles.infoContainer, {marginTop: '3%'}]}>
+                <Text style={styles.label}>Description:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={description}
+                  onChangeText={setDescription}
+                  placeholder="Enter description"
+                  editable={false}
                 />
-              )}
-              {/* {errors.date && (
+              </View>
+
+              {/* Remarks Input */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Remarks</Text>
+                <TextInput
+                  style={[
+                    styles.input,
+                    styles.textArea,
+                    errors.remarks ? {borderColor: 'red'} : {},
+                  ]}
+                  placeholder="Enter Remarks"
+                  placeholderTextColor={colors.txtcolor}
+                  value={remarks}
+                  onChangeText={handleRemarksChange}
+                  multiline
+                  onBlur={validateRemarks}
+                />
+                {errors.remarks ? (
+                  <Text style={{color: 'red', fontSize: 12}}>
+                    {errors.remarks}
+                  </Text>
+                ) : null}
+              </View>
+
+              {/* Date Picker */}
+              <View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start',
+                  }}>
+                  <Text style={styles.datePickerLabel}>Update Date:</Text>
+                  <TouchableOpacity onPress={() => setIsPickerOpen(true)}>
+                    <Text style={[styles.datePickerLabel, {marginRight: 0}]}>
+                      {' '}
+                      {/* {dayjs(date).format('YYYY-MM-DD')} */}
+                      {date === 'Select Date'
+                        ? 'Select Date'
+                        : dayjs(date).format('YYYY-MM-DD')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                {isPickerOpen && (
+                  <DateTimePicker
+                    mode="single"
+                    // date={date || new Date()}
+                    date={date instanceof Date ? date : new Date()}
+                    onChange={handleDateChange}
+                    onCancel={handleCancel}
+                    selectedItemColor="#4C17A9"
+                    minDate={new Date('2023-12-11')} // Allow selection of the previous day and today
+                    maxDate={new Date()} // Don't allow future dates
+                  />
+                )}
+                {/* {errors.date && (
                 <Text style={styles.errorText}>{errors.date}</Text>
               )} */}
-            </View>
-          </>
-        ) : (
-          <>
-            {/* Normal View */}
-            <View
-              style={{
-                flexDirection: 'row',
-                // backgroundColor: 'cyan',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                width: '100%',
-                height: '15%',
-              }}>
-              <View>
-                <Text style={[styles.taskName, {width: '100%'}]}>
-                  {taskName}
-                </Text>
               </View>
-              <View
-                style={{
-                  padding: 10,
-                  backgroundColor: colors.btncolor,
-                  borderRadius: 8, 
-                  // shadowColor: '#000', 
-                  // shadowOffset: {width: 0, height: 2}, 
-                  // shadowOpacity: 0.1, 
-                  // shadowRadius: 4,
-                  // elevation: 3, 
-                  justifyContent: 'center', 
-                  width: 'auto',
-                }}>
-                <Text style={[styles.titleName, {width: '100%'}]}>{title}</Text>
-              </View>
-            </View>
-
-            <View style={[styles.rowView, {marginTop: 10}]}>
-              <Text style={styles.label}>
-                Client:{' '}
-                <Text style={styles.value}>{tasklistinfo?.ClientName}</Text>
-              </Text>
-            </View>
-            <View style={styles.infoContainer}>
-              <Text style={styles.label}>Description:</Text>
-              <Text style={styles.value}>{description}</Text>
-            </View>
-            <View>
-              <Text style={styles.label}>
-                Assigned Date:{' '}
-                <Text style={styles.value}>
-                  {dayjs(tasklistinfo?.TaskCreationDate).format('YYYY-MM-DD')}
-                </Text>
-              </Text>
-            </View>
-
-            {/* Start and End Dates */}
-            <View style={styles.rowView}>
+            </>
+          ) : (
+            <>
+              {/* Normal View */}
               <View
                 style={{
                   flexDirection: 'row',
-                  justifyContent: 'space-around',
+                  // backgroundColor: 'cyan',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
+                  width: '100%',
+                  height: '15%',
                 }}>
-                <Text style={styles.label}>Start: </Text>
-                <Text style={styles.dateValue}>
-                  {dayjs(startDate).format('YYYY-MM-DD')}
-                </Text>
+                <View>
+                  <Text style={[styles.taskName, {width: '100%'}]}>
+                    {taskName}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    padding: 10,
+                    backgroundColor: colors.btncolor,
+                    borderRadius: 8,
+                    // shadowColor: '#000',
+                    // shadowOffset: {width: 0, height: 2},
+                    // shadowOpacity: 0.1,
+                    // shadowRadius: 4,
+                    // elevation: 3,
+                    justifyContent: 'center',
+                    width: 'auto',
+                  }}>
+                  <Text style={[styles.titleName, {width: '100%'}]}>
+                    {title}
+                  </Text>
+                </View>
+              </View>
 
-                {/* Dash */}
-                <ComIcon
-                  name="minus"
-                  size={16}
-                  color={colors.txtcolor}
-                  style={{marginHorizontal: 8}} 
-                />
-                {/* <Text style={styles.label}>End: </Text> */}
-                <Text style={styles.dateValue}>
-                  {dayjs(endDate).format('YYYY-MM-DD')}
+              <View style={[styles.rowView, {marginTop: 10}]}>
+                <Text style={styles.label}>
+                  Client:{' '}
+                  <Text style={styles.value}>{tasklistinfo?.ClientName}</Text>
                 </Text>
               </View>
-            </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Description:</Text>
+                <Text style={styles.value}>{description}</Text>
+              </View>
+              <View>
+                <Text style={styles.label}>
+                  Assigned Date:{' '}
+                  <Text style={styles.value}>
+                    {dayjs(tasklistinfo?.TaskCreationDate).format('YYYY-MM-DD')}
+                  </Text>
+                </Text>
+              </View>
 
-            {/* Priority */}
-            <View style={styles.rowView}>
-              <Text style={styles.label}>
-                Priority: <Text style={styles.value}>{priority}</Text>
-              </Text>
-            </View>
+              {/* Start and End Dates */}
+              <View style={styles.rowView}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={styles.label}>Start: </Text>
+                  <Text style={styles.dateValue}>
+                    {dayjs(startDate).format('YYYY-MM-DD')}
+                  </Text>
 
-            {/* Target Value */}
-            <View>
-              <Text style={styles.label}>
-                Target {tasklistinfo?.UOM_Name}:{' '}
-                <Text style={styles.value}>{targetValue}</Text>
-              </Text>
-            </View>
+                  {/* Dash */}
+                  <ComIcon
+                    name="minus"
+                    size={16}
+                    color={colors.txtcolor}
+                    style={{marginHorizontal: 8}}
+                  />
+                  {/* <Text style={styles.label}>End: </Text> */}
+                  <Text style={styles.dateValue}>
+                    {dayjs(endDate).format('YYYY-MM-DD')}
+                  </Text>
+                </View>
+              </View>
 
-            {/* Achieved Value */}
-            <View>
-              <Text style={styles.label}>
-                Achieved {tasklistinfo?.UOM_Name}:{' '}
-                <Text style={styles.value}>{achievedValue}</Text>
-              </Text>
-            </View>
+              {/* Priority */}
+              <View style={styles.rowView}>
+                <Text style={styles.label}>
+                  Priority: <Text style={styles.value}>{priority}</Text>
+                </Text>
+              </View>
 
-            {/* Status */}
-            <View>
-              <Text style={styles.label}>
-                Status: <Text style={styles.value}>{status}</Text>
-              </Text>
-            </View>
-          </>
-        )}
-      </ScrollView>
+              {/* Target Value */}
+              <View>
+                <Text style={styles.label}>
+                  Target {tasklistinfo?.UOM_Name}:{' '}
+                  <Text style={styles.value}>{targetValue}</Text>
+                </Text>
+              </View>
 
-      {/* Action Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.editButton} onPress={toggleEdit}>
-          <Text style={styles.buttonText}>
-            {isEditable ? 'Cancel' : 'Status Update'}
-          </Text>
-        </TouchableOpacity>
-        {isEditable && (
-          <TouchableOpacity
-            style={[
-              styles.updateButton,
-              // {backgroundColor: !date ? '#FF5722' : '#4CAF50'},
-              {backgroundColor: !date ? '#d3d3d3' : '#FF5722'},
-            ]}
-            onPress={handleUpdate}
-            disabled={!date}>
-            <Text style={styles.buttonText}>Submit</Text>
+              {/* Achieved Value */}
+              <View>
+                <Text style={styles.label}>
+                  Achieved {tasklistinfo?.UOM_Name}:{' '}
+                  <Text style={styles.value}>{achievedValue}</Text>
+                </Text>
+              </View>
+
+              {/* Status */}
+              <View>
+                <Text style={styles.label}>
+                  Status: <Text style={styles.value}>{status}</Text>
+                </Text>
+              </View>
+            </>
+          )}
+        </ScrollView>
+
+        {/* Action Buttons */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.editButton} onPress={toggleEdit}>
+            <Text style={styles.buttonText}>
+              {isEditable ? 'Cancel' : 'Status Update'}
+            </Text>
           </TouchableOpacity>
-        )}
+          {isEditable && (
+            <TouchableOpacity
+              style={[
+                styles.updateButton,
+                // {backgroundColor: !date ? '#FF5722' : '#4CAF50'},
+                {backgroundColor: !date ? '#d3d3d3' : '#FF5722'},
+              ]}
+              onPress={handleUpdate}
+              disabled={!date}>
+              <Text style={styles.buttonText}>Submit</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,12 +1,162 @@
+
+// import {StyleSheet} from 'react-native';
+// import {responsiveHeight, responsiveWidth, responsiveFontSize} from 'react-native-responsive-dimensions';
+// import {colors} from '../../Assets/colors';
+
+// export const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: colors.bgcolor,
+//     width: responsiveWidth(100), // Full width of the screen
+//     height: responsiveHeight(100), // Full height of the screen
+//   },
+
+//   // header
+//   gradientHeader: {
+//     width: '100%',
+//     paddingVertical: responsiveHeight(2), // Adjust padding based on screen height
+//     shadowColor: '#000',
+//     shadowOffset: {width: 0, height: 2},
+//     shadowOpacity: 0.2,
+//     shadowRadius: 6,
+//     elevation: 5,
+//   },
+
+//   headerContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     paddingHorizontal: responsiveWidth(5), // Adjust padding based on screen width
+//     position: 'relative',
+//   },
+
+//   backButton: {
+//     position: 'absolute',
+//     right: 0,
+//     padding: responsiveWidth(2),
+//   },
+
+//   centerContainer: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+
+//   logo: {
+//     width: responsiveWidth(25), // Adjust logo width for responsiveness
+//     height: responsiveHeight(7), // Adjust logo height for responsiveness
+//     resizeMode: 'contain',
+//   },
+
+//   // Welcome Section Styling
+//   usernameSection: {
+//     padding: responsiveWidth(5), // Responsive padding
+//     paddingTop: responsiveHeight(2),
+//     paddingBottom: responsiveHeight(2),
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: 'transparent',
+//   },
+
+//   username: {
+//     fontSize: responsiveFontSize(2.5), // Responsive font size for username
+//     fontWeight: '500',
+//     color: '#333',
+//     textAlign: 'center',
+//     letterSpacing: 0.8,
+//   },
+
+//   // Card styles
+//   innerContainer: {
+//     width: '100%',
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: 'transparent',
+//     marginTop: 0,
+//     paddingHorizontal: responsiveWidth(5), // Adjust horizontal padding for responsiveness
+//   },
+
+//   row: {
+//     justifyContent: 'space-between',
+//     marginBottom: responsiveHeight(1.5), // Adjust bottom margin for responsiveness
+//     paddingHorizontal: responsiveWidth(2), // Adjust padding for responsiveness
+//     gap: 5,
+//   },
+
+//   card: {
+//     width: '45%',
+//     height: responsiveHeight(16), // Responsive card height
+//     marginVertical: responsiveHeight(0.2), // Responsive vertical margin
+//     borderRadius: 12,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: colors.white,
+//     elevation: 2,
+//     shadowColor: '#000',
+//     shadowOffset: {width: 0, height: 2},
+//     shadowOpacity: 0.1,
+//     shadowRadius: 4,
+//     padding: responsiveWidth(3), // Responsive padding for cards
+//     borderWidth: 1,
+//     borderColor: 'rgba(0,0,0,0.05)',
+//   },
+
+//   cardText: {
+//     fontSize: responsiveFontSize(1.8), // Responsive font size for card text
+//     fontWeight: '500',
+//     color: '#333',
+//     textAlign: 'center',
+//     marginTop: responsiveHeight(1),
+//     flexWrap: 'wrap',
+//     width: '65%',
+//     lineHeight: responsiveHeight(2),
+//   },
+
+//   iconContainer: {
+//     width: responsiveWidth(12), // Responsive icon container size
+//     height: responsiveWidth(12), // Responsive icon container size
+//     borderRadius: 8,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: 'linear-gradient(45deg, #FFA500, #FF4500)', // Gradient
+//     marginTop: responsiveHeight(1),
+//   },
+
+//   countBadge: {
+//     position: 'absolute',
+//     top: responsiveHeight(1),
+//     right: responsiveWidth(1),
+//     backgroundColor: '#FF4500',
+//     width: responsiveWidth(5), // Responsive badge size
+//     height: responsiveWidth(5), // Responsive badge size
+//     borderRadius: 10,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     elevation: 2,
+//   },
+
+//   countText: {
+//     fontSize: responsiveFontSize(1.5), // Responsive font size for count
+//     fontWeight: 'bold',
+//     color: colors.white,
+//     textAlign: 'center',
+//   },
+// });
+
+
 import {StyleSheet, Dimensions} from 'react-native';
+import {responsiveHeight, responsiveWidth, responsiveFontSize} from 'react-native-responsive-dimensions';
 import {colors} from '../../Assets/colors';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.bgcolor,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    // width: Dimensions.get('window').width,
+    // height: Dimensions.get('window').height,
+    width: responsiveWidth(100), // Full width of the screen
+    height: responsiveHeight(100), 
   },
 
   // header
@@ -58,7 +208,7 @@ export const styles = StyleSheet.create({
   // Welcome Section Styling
   usernameSection: {
     padding: 25,
-    paddingTop: 40,
+    paddingTop: 15,
     paddingBottom: 15,
     justifyContent: 'center',
     alignItems: 'center',
@@ -75,92 +225,74 @@ export const styles = StyleSheet.create({
   },
 
   username: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '500',
     color: '#333',
     textAlign: 'center',
     letterSpacing: 0.8,
   },
 
+  // Card styles
   innerContainer: {
     width: '100%',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
-    marginTop: 20,
-    paddingHorizontal: 15,
+    marginTop: 0,
+    paddingHorizontal: 20,
   },
 
   row: {
     justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-
-  cardWrapper: {
-    width: '45%',
-    marginVertical: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 12,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#4d5154',
-  },
-
-  // skeleton
-  skeletonIcon: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#E0E0E0',
     marginBottom: 10,
-  },
-  skeletonText: {
-    width: 80,
-    height: 20,
-    borderRadius: 4,
-    backgroundColor: '#E0E0E0',
+    paddingHorizontal: 10,
+    gap: 5,
   },
 
-  // card design
   card: {
-    width: '43%',
-    height: 130, // Adjusted height for balance
-    marginVertical: 15, // Slightly increased margin for spacious feel
-    borderRadius: 15, // Softer rounded corners
+    width: '45%', // Slightly increased to balance space
+    height: 130,
+    marginVertical: 5,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.white, // Clean white background
-    elevation: 2, // Subtle elevation for depth
+    backgroundColor: colors.white,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    padding: 20, // Generous padding for a clean and spacious layout
+    shadowRadius: 4,
+    padding: 10, // Reduced padding for compactness
     borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.05)', // Soft border for structure
+    borderColor: 'rgba(0,0,0,0.05)',
   },
+
+  cardText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#333',
+    textAlign: 'center',
+    marginTop: 8,
+    flexWrap: 'wrap',
+    width: '65%',
+    lineHeight: 18,
+  },
+
   iconContainer: {
     width: 45,
     height: 45,
-    borderRadius: 10,
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'linear-gradient(45deg, #FFA500, #FF4500)', // Gradient
-    marginTop: 10,
-  },
-  cardText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center',
+    marginTop: 8,
   },
 
   countBadge: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: 8,
+    right: 8,
     backgroundColor: '#FF4500',
     width: 20,
     height: 20,
@@ -169,13 +301,17 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 2,
   },
+
   countText: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: 'bold',
     color: colors.white,
     textAlign: 'center',
   },
-  // card: {
+});
+
+
+// card: {
   //   width: '45%',
   //   height: 130, // Adjusted height for balance
   //   marginVertical: 15, // Slightly increased margin for spacious feel
@@ -227,4 +363,3 @@ export const styles = StyleSheet.create({
   // row: {
   //   justifyContent: 'space-between',
   // },
-});

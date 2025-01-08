@@ -7,6 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
   Modal,
+  BackHandler,
+  SafeAreaView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -22,15 +24,28 @@ const ClaimsList = ({route, navigation}) => {
   const {id, title} = route.params || {id: null, title: 'Unknown Project'};
   const dispatch = useDispatch();
   const {getClaimsData} = useSelector(state => state.getClaims);
-
-  console.log('getClaimsData', getClaimsData);
+  // console.log('getClaimsData', getClaimsData);
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState(null);
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        navigation.goBack();
+        return true;
+      },
+    );
+
+    return () => {
+      backHandler.remove();
+    };
+  }, [navigation]);
 
   // Fetch claims when screen is focused
   useFocusEffect(
     React.useCallback(() => {
-      fetchGetClaims(); 
+      fetchGetClaims();
     }, []),
   );
 
@@ -135,6 +150,7 @@ const ClaimsList = ({route, navigation}) => {
   );
 
   return (
+    <SafeAreaView style={{flex:1}}>
     <View style={styles.container}>
       <LinearGradient
         colors={['#FF6A00', '#FF9500']}
@@ -154,14 +170,7 @@ const ClaimsList = ({route, navigation}) => {
       </LinearGradient>
 
       <View
-        style={{
-          width: '100%',
-          paddingHorizontal: 15,
-          marginTop: '5%',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'flex-end',
-        }}>
+        style={styles.addclaimContainer}>
         <TouchableOpacity
           style={styles.addClaimButton}
           onPress={() => navigation.navigate('addclaims')}>
@@ -260,6 +269,7 @@ const ClaimsList = ({route, navigation}) => {
         </Modal>
       )}
     </View>
+    </SafeAreaView>
   );
 };
 

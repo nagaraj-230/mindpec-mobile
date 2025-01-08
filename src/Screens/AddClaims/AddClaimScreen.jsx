@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Dimensions,
+  SafeAreaView,
   TextInput,
   TouchableOpacity,
   Alert,
@@ -216,180 +217,184 @@ const AddClaimScreen = ({route, navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <LinearGradient
-        colors={['#FF6A00', '#FF9500']}
-        style={styles.gradientHeader}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#FFF" />
-          </TouchableOpacity>
-          <View style={styles.centerContainer}>
-            <Text style={styles.headerText}>
-              {claimData ? 'Edit Claim' : 'Add New Claim'}
-            </Text>
-          </View>
-        </View>
-      </LinearGradient>
-
-      {/* Form */}
-      <KeyboardAvoidingView
-        style={{flex: 1}}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <ScrollView
-          contentContainerStyle={{paddingBottom: 20}}
-          keyboardShouldPersistTaps="handled">
-          <View style={styles.formContainer}>
-            {/* Date Picker */}
-            <Text style={styles.label}>Date</Text>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        {/* Header */}
+        <LinearGradient
+          colors={['#FF6A00', '#FF9500']}
+          style={styles.gradientHeader}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}>
+          <View style={styles.headerContainer}>
             <TouchableOpacity
-              onPress={() => setIsPickerOpen(true)}
-              style={styles.inputContainer}>
-              <Text style={styles.inputText}>
-                {dayjs(date).format('YYYY-MM-DD')}
-              </Text>
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              <Icon name="arrow-back" size={24} color="#FFF" />
             </TouchableOpacity>
-            {isPickerOpen && (
-              <DateTimePicker
-                mode="single"
-                date={date}
-                onChange={selectedDate => {
-                  setDate(selectedDate.date);
-                  setIsPickerOpen(false);
-                }}
-                onCancel={() => setIsPickerOpen(false)}
-                selectedItemColor="#4C17A9"
-                minDate={new Date('2023-12-11')}
-                maxDate={new Date()}
-              />
-            )}
+            <View style={styles.centerContainer}>
+              <Text style={styles.headerText}>
+                {claimData ? 'Edit Claim' : 'Add New Claim'}
+              </Text>
+            </View>
+          </View>
+        </LinearGradient>
 
-            {/* Amount */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Amount</Text>
-              <TextInput
-                style={[styles.input, error && styles.inputError]}
-                placeholder="Enter Amount"
-                keyboardType="numeric"
-                value={amount}
-                onChangeText={validateAmount}
-                maxLength={7}
-              />
-              {error ? <Text style={styles.errorText}>{error}</Text> : null}
-            </View>
-
-            {/* Expense Type Dropdown */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Expense Type</Text>
-              <Dropdown
-                style={styles.dropdown}
-                data={claimsType.map(type => ({
-                  label: type.ClaimTypeName,
-                  value: type.ClaimTypeID,
-                }))}
-                labelField="label"
-                valueField="value"
-                placeholder="Select Expense Type"
-                value={expenseType}
-                onChange={item => {
-                  setExpenseType(item.value),
-                    console.log('setExpenseType', item.value);
-                }}
-              />
-            </View>
-            {/* Company User Name Dropdown */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Submitted To</Text>
-              <Dropdown
-                style={styles.dropdown}
-                // data={comapyData}
-                data={companyUsersData
-                  .filter(user => user.UserID !== currentUserId) // Exclude current user
-                  .map(user => ({
-                    label: user.UserName,
-                    value: user.UserID,
-                  }))}
-                labelField="label"
-                valueField="value"
-                placeholder="Select User"
-                value={companyUserId}
-                onChange={item => {
-                  setCompanyUserId(item.value),
-                    console.log('setCompanyUserId', item.value);
-                }}
-              />
-            </View>
-            {/* Remarks */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>Remarks</Text>
-              <TextInput
-                style={[styles.input, styles.textArea]}
-                placeholder="Enter Remarks"
-                value={remarks}
-                onChangeText={setRemarks}
-                maxLength={250}
-                multiline
-              />
-              {remarks && remarks.length < 5 && (
-                <Text style={{color: 'red', fontSize: 12}}>
-                  Remarks must be at least 5 characters.
+        {/* Form */}
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <ScrollView
+            contentContainerStyle={{paddingBottom: 20}}
+            keyboardShouldPersistTaps="handled">
+            <View style={styles.formContainer}>
+              {/* Date Picker */}
+              <Text style={styles.label}>Date</Text>
+              <TouchableOpacity
+                onPress={() => setIsPickerOpen(true)}
+                style={styles.inputContainer}>
+                <Text style={styles.inputText}>
+                  {dayjs(date).format('YYYY-MM-DD')}
                 </Text>
+              </TouchableOpacity>
+              {isPickerOpen && (
+                <DateTimePicker
+                  mode="single"
+                  date={date}
+                  onChange={selectedDate => {
+                    setDate(selectedDate.date);
+                    setIsPickerOpen(false);
+                  }}
+                  onCancel={() => setIsPickerOpen(false)}
+                  selectedItemColor="#4C17A9"
+                  minDate={new Date('2023-12-11')}
+                  maxDate={new Date()}
+                />
               )}
-            </View>
 
-            {/* Claim Status Dropdown */}
-            {claimData && (
+              {/* Amount */}
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Claim Status</Text>
+                <Text style={styles.label}>Amount</Text>
+                <TextInput
+                  style={[styles.input, error && styles.inputError]}
+                  placeholder="Enter Amount"
+                  keyboardType="numeric"
+                  value={amount}
+                  onChangeText={validateAmount}
+                  maxLength={7}
+                />
+                {error ? <Text style={styles.errorText}>{error}</Text> : null}
+              </View>
+
+              {/* Expense Type Dropdown */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Expense Type</Text>
                 <Dropdown
                   style={styles.dropdown}
-                  // data={comapyData}
-                  data={claimStatusData.map(status => ({
-                    label: status.ClaimStatusName,
-                    value: status.ClaimStatusID,
+                  data={claimsType.map(type => ({
+                    label: type.ClaimTypeName,
+                    value: type.ClaimTypeID,
                   }))}
                   labelField="label"
                   valueField="value"
-                  placeholder="Select Status"
-                  value={claimStatusId}
+                  placeholder="Select Expense Type"
+                  value={expenseType}
                   onChange={item => {
-                    setClaimStatusId(item.value),
-                      console.log('setClaimStatusId', item.value);
+                    setExpenseType(item.value),
+                      console.log('setExpenseType', item.value);
                   }}
                 />
               </View>
-            )}
+              {/* Company User Name Dropdown */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Submitted To</Text>
+                <Dropdown
+                  style={styles.dropdown}
+                  // data={comapyData}
+                  data={companyUsersData
+                    .filter(user => user.UserID !== currentUserId) // Exclude current user
+                    .map(user => ({
+                      label: user.UserName,
+                      value: user.UserID,
+                    }))}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Select User"
+                  value={companyUserId}
+                  onChange={item => {
+                    setCompanyUserId(item.value),
+                      console.log('setCompanyUserId', item.value);
+                  }}
+                />
+              </View>
+              {/* Remarks */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Remarks</Text>
+                <TextInput
+                  style={[styles.input, styles.textArea]}
+                  placeholder="Enter Remarks"
+                  value={remarks}
+                  onChangeText={setRemarks}
+                  maxLength={250}
+                  multiline
+                />
+                {remarks && remarks.length < 5 && (
+                  <Text style={{color: 'red', fontSize: 12}}>
+                    Remarks must be at least 5 characters.
+                  </Text>
+                )}
+              </View>
 
-            {/* File Upload */}
-            <TouchableOpacity onPress={pickFile} style={styles.inputContainer}>
-              <Text style={styles.label}>File Upload</Text>
-              <Text style={styles.inputText}>
-                {file ? file.name : 'Select a file (image or document)'}
-              </Text>
-            </TouchableOpacity>
+              {/* Claim Status Dropdown */}
+              {claimData && (
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Claim Status</Text>
+                  <Dropdown
+                    style={styles.dropdown}
+                    // data={comapyData}
+                    data={claimStatusData.map(status => ({
+                      label: status.ClaimStatusName,
+                      value: status.ClaimStatusID,
+                    }))}
+                    labelField="label"
+                    valueField="value"
+                    placeholder="Select Status"
+                    value={claimStatusId}
+                    onChange={item => {
+                      setClaimStatusId(item.value),
+                        console.log('setClaimStatusId', item.value);
+                    }}
+                  />
+                </View>
+              )}
 
-            {/* Buttons */}
-            <View style={styles.buttonContainer}>
+              {/* File Upload */}
               <TouchableOpacity
-                style={[styles.button, styles.cancelButton]}
-                onPress={() => navigation.goBack()}>
-                <Text style={styles.buttonText}>Cancel</Text>
+                onPress={pickFile}
+                style={styles.inputContainer}>
+                <Text style={styles.label}>File Upload</Text>
+                <Text style={styles.inputText}>
+                  {file ? file.name : 'Select a file (image or document)'}
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, styles.submitButton]}
-                onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Submit</Text>
-              </TouchableOpacity>
+
+              {/* Buttons */}
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[styles.button, styles.cancelButton]}
+                  onPress={() => navigation.goBack()}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, styles.submitButton]}
+                  onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Submit</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </View>
+    </SafeAreaView>
   );
 };
 

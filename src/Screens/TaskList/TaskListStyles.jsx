@@ -1,4 +1,10 @@
 import {StyleSheet, Dimensions} from 'react-native';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
+
 import {colors} from '../../Assets/colors';
 
 export const styles = StyleSheet.create({
@@ -49,11 +55,15 @@ export const styles = StyleSheet.create({
   },
 
   taskList: {
-    padding: 15,
+    // padding: 15,
+    padding: responsiveHeight(1.5),
+    // backgroundColor: 'cyan',
   },
 
+  // render items
   taskContainer: {
-    marginBottom: 15,
+    // marginBottom: 15,
+    marginBottom: responsiveHeight(1.5),
     borderRadius: 10,
     overflow: 'hidden',
     elevation: 4,
@@ -63,7 +73,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     // alignItems: 'center',
-    padding: 15,
+    // padding: 15,
+    padding: responsiveWidth(3.5),
     borderRadius: 10,
   },
 
@@ -83,18 +94,26 @@ export const styles = StyleSheet.create({
     color: '#666',
     marginLeft: 5,
   },
-  
+
   rightSection: {
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'flex-end',
   },
 
+  // taskName: {
+  //   fontSize: 18,
+  //   fontWeight: '700',
+  //   color: '#333',
+  //   marginBottom: 5,
+  // },
   taskName: {
     fontSize: 18,
     fontWeight: '700',
     color: '#333',
     marginBottom: 5,
+    flexWrap: 'wrap',
+    overflow: 'hidden', // Prevent text overflow
   },
 
   infoText: {
@@ -117,8 +136,8 @@ export const styles = StyleSheet.create({
   priorityBadge: {
     paddingVertical: 5,
     paddingHorizontal: 12,
-    borderRadius: 15, 
-    minWidth: 70, 
+    borderRadius: 15,
+    minWidth: 70,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
@@ -127,8 +146,8 @@ export const styles = StyleSheet.create({
   statusBadge: {
     paddingVertical: 5,
     paddingHorizontal: 12,
-    borderRadius: 15, 
-    minWidth: 70, 
+    borderRadius: 15,
+    minWidth: 70,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -152,7 +171,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'cyan', 
+    // backgroundColor: 'cyan',
   },
   noDataText: {
     color: '#FF902F',
