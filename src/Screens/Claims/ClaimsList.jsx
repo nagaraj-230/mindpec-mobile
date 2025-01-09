@@ -80,8 +80,8 @@ const ClaimsList = ({route, navigation}) => {
   };
 
   const renderItem = ({item}) => (
-    <View style={styles.cardContainer}>
-      <LinearGradient
+
+      <View
         colors={['#ffffff', '#f4f4f4']}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
@@ -149,12 +149,11 @@ const ClaimsList = ({route, navigation}) => {
             <TouchableOpacity
               style={styles.iconButton}
               onPress={() => handleViewDetails(item)}>
-              <FeatherIcon name="eye" size={20} color="#FFF" />
+              <Icon name="visibility" size={24} color="#FFF" />
             </TouchableOpacity>
           </View>
         </View>
-      </LinearGradient>
-    </View>
+      </View>
   );
 
   return (

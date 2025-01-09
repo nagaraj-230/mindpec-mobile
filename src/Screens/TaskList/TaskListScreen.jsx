@@ -102,8 +102,8 @@ const TaskListScreen = ({route, navigation}) => {
   };
 
   const renderItem = ({item}) => (
-    <View style={styles.taskContainer}>
-      <LinearGradient
+   
+      <View
         colors={['#f9f9f9', '#e6e6e6']}
         start={{x: 0, y: 0}}
         end={{x: 1, y: 1}}
@@ -188,8 +188,8 @@ const TaskListScreen = ({route, navigation}) => {
             <Icon name="visibility" size={24} color="#FFF" />
           </TouchableOpacity>
         </View>
-      </LinearGradient>
-    </View>
+      </View>
+
   );
 
   const noRenderData = () => {
@@ -231,7 +231,7 @@ const TaskListScreen = ({route, navigation}) => {
                 </View>
               </View>
             </LinearGradient>
-
+   
             <FlatList
               data={localTasks}
               renderItem={renderItem}

@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
   gradientHeader: {
     width: '100%',
     paddingVertical: 10,
+    height:60,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
@@ -62,6 +63,8 @@ export const styles = StyleSheet.create({
 
   // render items
   taskContainer: {
+    flex:1,
+    backgroundColor:'red',
     // marginBottom: 15,
     marginBottom: responsiveHeight(1.5),
     borderRadius: 10,
@@ -70,12 +73,17 @@ export const styles = StyleSheet.create({
   },
 
   gradientCard: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    // alignItems: 'center',
-    // padding: 15,
-    padding: responsiveWidth(3.5),
+   flexDirection: 'row',
+    padding: 15,
+    marginVertical: 10,
     borderRadius: 10,
+    elevation: 3, // Shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    backgroundColor: '#fff', // Fallback for gradient
+  
   },
 
   leftSection: {

@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 5,
+    height:60
   },
 
   headerContainer: {
@@ -68,10 +69,15 @@ export const styles = StyleSheet.create({
 
   gradientCard: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    // padding: 10,
-    padding: responsiveHeight(1),
+    padding: 15,
+    marginVertical: 10,
     borderRadius: 10,
+    elevation: 3, // Shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    backgroundColor: '#fff', // Fallback for gradient
   },
 
   infoSection: {
@@ -150,11 +156,13 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
+
   },
   addClaimButton: {
     borderRadius: 10,
     overflow: 'hidden',
     elevation: 5,
+
   },
   addClaimGradient: {
     flexDirection: 'row',
@@ -162,11 +170,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     // paddingVertical: 8,
     // paddingHorizontal: 10,
+    height:40,
+    width:130,
+   
 
-    paddingVertical: responsiveHeight(0.8),
-    paddingHorizontal: responsiveWidth(2),
-
-    borderRadius: 10,
+    borderRadius: 20,
     shadowColor: '#000', // iOS shadow
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
