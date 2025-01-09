@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   gradientHeader: {
     width: '100%',
     // paddingVertical: 10,
-    height: Platform.OS === 'ios' ? responsiveHeight(8) : responsiveHeight(6),
+    height: Platform.OS === 'ios' ? responsiveHeight(6) : responsiveHeight(6),
     justifyContent: 'center',
 
     shadowColor: '#000',

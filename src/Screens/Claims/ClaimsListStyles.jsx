@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 5,
-    height: Platform.OS === 'ios' ? responsiveHeight(8) : responsiveHeight(6),
+    height: Platform.OS === 'ios' ? responsiveHeight(6) : responsiveHeight(6),
   },
 
   headerContainer: {
