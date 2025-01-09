@@ -23,7 +23,7 @@ target 'TaMS' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'mindpecTests' do
+  target 'TaMSTests' do
     inherit! :complete
     # Pods for testing
   end

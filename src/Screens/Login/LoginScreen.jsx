@@ -35,7 +35,7 @@ const LoginScreen = ({navigation}) => {
 
   const dispatch = useDispatch();
 
-  const data = [{label: 'MindPec Solutions', value: '1'}];
+  const data = [{label: 'TaMS Solutions', value: '1'}];
 
   // Basic validation function
   const handleValidation = () => {

@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface mindpecTests : XCTestCase
+@interface TaMSTests : XCTestCase
 
 @end
 
-@implementation mindpecTests
+@implementation TaMSTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
