@@ -138,6 +138,10 @@ export const styles = StyleSheet.create({
     elevation: 4,
   },
 
+  disabledButton: {
+    backgroundColor: '#E0E0E0',
+  },
+
   // ---------
   addclaimContainer: {
     width: '100%',

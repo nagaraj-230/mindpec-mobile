@@ -24,8 +24,8 @@ const ClaimsList = ({route, navigation}) => {
   const {id, title} = route.params || {id: null, title: 'Unknown Project'};
   const dispatch = useDispatch();
   const {getClaimsData} = useSelector(state => state.getClaims);
-  // console.log('getClaimsData', getClaimsData);
-  
+  console.log('getClaimsData', getClaimsData);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState(null);
   useEffect(() => {
@@ -131,11 +131,19 @@ const ClaimsList = ({route, navigation}) => {
         <View style={styles.actionSection}>
           <View style={styles.actionButtons}>
             <TouchableOpacity
-              style={styles.iconButton}
+              style={[
+                styles.iconButton,
+                item.ClaimStatus === 'Approved' && styles.disabledButton,
+              ]}
+              disabled={item.ClaimStatus === 'Approved'}
               onPress={() =>
                 navigation.navigate('addclaims', {claimData: item})
               }>
-              <FeatherIcon name="edit-2" size={20} color="#FFF" />
+              <FeatherIcon
+                name="edit-2"
+                size={20}
+                color={item.ClaimStatus === 'Approved' ? '#CCC' : '#FFF'}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -150,125 +158,127 @@ const ClaimsList = ({route, navigation}) => {
   );
 
   return (
-    <SafeAreaView style={{flex:1}}>
-    <View style={styles.container}>
-      <LinearGradient
-        colors={['#FF6A00', '#FF9500']}
-        style={styles.gradientHeader}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#FFF" />
-          </TouchableOpacity>
-          <View style={styles.centerContainer}>
-            <Text style={styles.headerText}>{'Claims'}</Text>
-          </View>
-        </View>
-      </LinearGradient>
-
-      <View
-        style={styles.addclaimContainer}>
-        <TouchableOpacity
-          style={styles.addClaimButton}
-          onPress={() => navigation.navigate('addclaims')}>
-          <LinearGradient
-            colors={['#FF6A00', '#FF9500']}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-            style={styles.addClaimGradient}>
-            <Icon name="add-circle-outline" size={20} color="#FFF" />
-            <Text style={styles.addText}>Add Claim</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-
-      <FlatList
-        data={getClaimsData}
-        renderItem={renderItem}
-        keyExtractor={item => item.ClaimID.toString()}
-        contentContainerStyle={styles.taskList}
-      />
-
-      {/* Modal for Viewing Details */}
-      {modalVisible && selectedClaim && (
-        <Modal
-          transparent={true}
-          visible={modalVisible}
-          animationType="slide"
-          onRequestClose={() => setModalVisible(false)}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalOverlay}></View>
-            <View style={styles.modalContent}>
-              <LinearGradient
-                colors={['#FF6A00', '#FF9500']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}
-                style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>Claim Details</Text>
-              </LinearGradient>
-              <View style={styles.modalBody}>
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>User Name:</Text>
-                  <Text style={styles.value}>
-                    {selectedClaim.ClaimUserName}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>Date:</Text>
-                  <Text style={styles.value}>
-                    {selectedClaim.ClaimDate.split('T')[0]}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>Amount:</Text>
-                  <Text style={styles.value}>${selectedClaim.ClaimAmount}</Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>Type:</Text>
-                  <Text style={styles.value}>
-                    {selectedClaim.ClaimTypeName}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>Remarks:</Text>
-                  <Text style={styles.remarksText}>
-                    {selectedClaim.ClaimRemarks || 'No remarks'}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={styles.detailRow}>
-                  <Text style={styles.label}>Status:</Text>
-                  <View
-                    style={[
-                      styles.modalStatusBadge,
-                      {
-                        backgroundColor:
-                          statusColors[selectedClaim?.ClaimStatus] || '#58d68d', // Fallback color
-                      },
-                    ]}>
-                    <Text style={styles.badgeText}>
-                      {selectedClaim.ClaimStatus}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <TouchableOpacity
-                style={styles.closeButton}
-                onPress={() => setModalVisible(false)}>
-                <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <LinearGradient
+          colors={['#FF6A00', '#FF9500']}
+          style={styles.gradientHeader}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              <Icon name="arrow-back" size={24} color="#FFF" />
+            </TouchableOpacity>
+            <View style={styles.centerContainer}>
+              <Text style={styles.headerText}>{'Claims'}</Text>
             </View>
           </View>
-        </Modal>
-      )}
-    </View>
+        </LinearGradient>
+
+        <View style={styles.addclaimContainer}>
+          <TouchableOpacity
+            style={styles.addClaimButton}
+            onPress={() => navigation.navigate('addclaims')}>
+            <LinearGradient
+              colors={['#FF6A00', '#FF9500']}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              style={styles.addClaimGradient}>
+              <Icon name="add-circle-outline" size={20} color="#FFF" />
+              <Text style={styles.addText}>Add Claim</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
+        <FlatList
+          data={getClaimsData}
+          renderItem={renderItem}
+          keyExtractor={item => item.ClaimID.toString()}
+          contentContainerStyle={styles.taskList}
+        />
+
+        {/* Modal for Viewing Details */}
+        {modalVisible && selectedClaim && (
+          <Modal
+            transparent={true}
+            visible={modalVisible}
+            animationType="slide"
+            onRequestClose={() => setModalVisible(false)}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalOverlay}></View>
+              <View style={styles.modalContent}>
+                <LinearGradient
+                  colors={['#FF6A00', '#FF9500']}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 1}}
+                  style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>Claim Details</Text>
+                </LinearGradient>
+                <View style={styles.modalBody}>
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>User Name:</Text>
+                    <Text style={styles.value}>
+                      {selectedClaim.ClaimUserName}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>Date:</Text>
+                    <Text style={styles.value}>
+                      {selectedClaim.ClaimDate.split('T')[0]}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>Amount:</Text>
+                    <Text style={styles.value}>
+                      ${selectedClaim.ClaimAmount}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>Type:</Text>
+                    <Text style={styles.value}>
+                      {selectedClaim.ClaimTypeName}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>Remarks:</Text>
+                    <Text style={styles.remarksText}>
+                      {selectedClaim.ClaimRemarks || 'No remarks'}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>Status:</Text>
+                    <View
+                      style={[
+                        styles.modalStatusBadge,
+                        {
+                          backgroundColor:
+                            statusColors[selectedClaim?.ClaimStatus] ||
+                            '#58d68d', // Fallback color
+                        },
+                      ]}>
+                      <Text style={styles.badgeText}>
+                        {selectedClaim.ClaimStatus}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setModalVisible(false)}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        )}
+      </View>
     </SafeAreaView>
   );
 };

@@ -200,99 +200,108 @@ const DashBoardScreen = ({route, navigation}) => {
   console.log('Filtered Data:', filteredTaskStatusData);
 
   return (
-    <SafeAreaView style={{flex:1}}>
-    <View style={styles.container}>
-      {isLoading ? (
-        <LoadingComponent />
-      ) : (
-        <>
-          {/* Custom Header */}
-          <LinearGradient
-            colors={['#FF6A00', '#FF9500']}
-            style={styles.gradientHeader}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}>
-            <View style={styles.headerContainer}>
-              <TouchableOpacity
-                onPress={handleLogout}
-                style={styles.backButton}>
-                <Icon name={'logout'} size={24} color={colors.white} />
-              </TouchableOpacity>
-              <View style={styles.centerContainer}>
-                <Image source={images.logo} style={styles.logo} />
-              </View>
-            </View>
-          </LinearGradient>
-
-          {/* Username Section */}
-          <View style={styles.usernameSection}>
-            <Text style={styles.username}>Welcome, {userNameState}</Text>
-          </View>
-
-          {/* Task Status Cards */}
-          <View style={styles.innerContainer}>
-            <FlatList
-              data={filteredTaskStatusData}
-              renderItem={({item}) => {
-                const {icon, color} = iconMapping[item.TaskStatusID] || {
-                  icon: item.icon,
-                  color: item.color,
-                };
-                const count = taskCounts[item.TaskStatusID];
-
-                return (
+    <>
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.container}>
+          {isLoading ? (
+            <LoadingComponent />
+          ) : (
+            <>
+              {/* Custom Header */}
+              <LinearGradient
+                colors={['#FF6A00', '#FF9500']}
+                style={styles.gradientHeader}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}>
+                <View style={styles.headerContainer}>
                   <TouchableOpacity
-                    style={styles.card}
-                    onPress={() =>
-                      handleCardPress(item.TaskStatusID, item.TaskStatusName)
-                    }
-                    activeOpacity={0.9}>
-                    {/* Count Badge */}
-                    {count !== null && (
-                      <View style={styles.countBadge}>
-                        {item.TaskStatusID === 7 ? (
-                          // Show totalClaims for Claims card
-                          // <Text style={styles.countText}>{totalClaims}</Text>
-                          <Text style={styles.countText}>{1}</Text>
-                        ) : (
-                          // Show count for other cards
-                          // <Text style={styles.countText}>{count}</Text>
-                          <Text style={styles.countText}>{1}</Text>
-                        )}
-                      </View>
-                    )}
-
-                    {/* Task Name */}
-
-                    <Text
-                      style={styles.cardText}
-                      numberOfLines={2}
-                      ellipsizeMode="tail">
-                      {item.TaskStatusName}
-                    </Text>
-
-                    {/* Icon */}
-                    <View
-                      style={[styles.iconContainer, {backgroundColor: color}]}>
-                      <Icon name={icon} size={24} color={colors.white} />
-                    </View>
+                    onPress={handleLogout}
+                    style={styles.backButton}>
+                    <Icon name={'logout'} size={24} color={colors.white} />
                   </TouchableOpacity>
-                );
-              }}
-              keyExtractor={item => item.TaskStatusID.toString()}
-              numColumns={2}
-              columnWrapperStyle={styles.row}
-              showsVerticalScrollIndicator={false}
-            />
-          </View>
-        </>
-      )}
-    </View>
-    </SafeAreaView>
+                  <View style={styles.centerContainer}>
+                    <Image source={images.logo} style={styles.logo} />
+                  </View>
+                </View>
+              </LinearGradient>
+
+              {/* Username Section */}
+              <View style={styles.usernameSection}>
+                <Text style={styles.username}>Welcome, {userNameState}</Text>
+              </View>
+
+              {/* Task Status Cards */}
+              <View style={styles.innerContainer}>
+                <FlatList
+                  data={filteredTaskStatusData}
+                  renderItem={({item}) => {
+                    const {icon, color} = iconMapping[item.TaskStatusID] || {
+                      icon: item.icon,
+                      color: item.color,
+                    };
+                    const count = taskCounts[item.TaskStatusID];
+
+                    return (
+                      <TouchableOpacity
+                        style={styles.card}
+                        onPress={() =>
+                          handleCardPress(
+                            item.TaskStatusID,
+                            item.TaskStatusName,
+                          )
+                        }
+                        activeOpacity={0.9}>
+                        {/* Count Badge */}
+                        {count !== null && (
+                          <View style={styles.countBadge}>
+                            {item.TaskStatusID === 7 ? (
+                              // Show totalClaims for Claims card
+                              // <Text style={styles.countText}>{totalClaims}</Text>
+                              <Text style={styles.countText}>{1}</Text>
+                            ) : (
+                              // Show count for other cards
+                              // <Text style={styles.countText}>{count}</Text>
+                              <Text style={styles.countText}>{1}</Text>
+                            )}
+                          </View>
+                        )}
+
+                        {/* Task Name */}
+
+                        <Text
+                          style={styles.cardText}
+                          numberOfLines={2}
+                          ellipsizeMode="tail">
+                          {item.TaskStatusName}
+                        </Text>
+
+                        {/* Icon */}
+                        <View
+                          style={[
+                            styles.iconContainer,
+                            {backgroundColor: color},
+                          ]}>
+                          <Icon name={icon} size={24} color={colors.white} />
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  }}
+                  keyExtractor={item => item.TaskStatusID.toString()}
+                  numColumns={2}
+                  columnWrapperStyle={styles.row}
+                  showsVerticalScrollIndicator={false}
+                />
+              </View>
+            </>
+          )}
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 
 export default DashBoardScreen;
+
 
 // renderItem={({item}) => {
 //   const count = taskCounts[item.TaskStatusID];

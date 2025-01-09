@@ -367,6 +367,44 @@ const AddClaimScreen = ({route, navigation}) => {
                 </View>
               )}
 
+              {/* Claim Status Dropdown */}
+              {/* {claimData && (
+                <View style={styles.inputContainer}>
+                  <Text style={styles.label}>Claim Status</Text>
+                  {claimStatusId ===
+                  getClaimStatusData.find(
+                    status => status.ClaimStatusName === 'Approved',
+                  )?.ClaimStatusID ? (
+                    // Show non-editable text when status is "Approved"
+                    <View
+                      style={[styles.dropdown, {backgroundColor: '#e0e0e0'}]}>
+                      <Text style={{color: '#757575', padding: 10}}>
+                        {claimStatusData.find(
+                          status => status.ClaimStatusID === claimStatusId,
+                        )?.ClaimStatusName || 'Approved'}
+                      </Text>
+                    </View>
+                  ) : (
+                    // Render dropdown normally for other statuses
+                    <Dropdown
+                      style={styles.dropdown}
+                      data={claimStatusData.map(status => ({
+                        label: status.ClaimStatusName,
+                        value: status.ClaimStatusID,
+                      }))}
+                      labelField="label"
+                      valueField="value"
+                      placeholder="Select Status"
+                      value={claimStatusId}
+                      onChange={item => {
+                        setClaimStatusId(item.value);
+                        console.log('setClaimStatusId', item.value);
+                      }}
+                    />
+                  )}
+                </View>
+              )} */}
+
               {/* File Upload */}
               <TouchableOpacity
                 onPress={pickFile}
