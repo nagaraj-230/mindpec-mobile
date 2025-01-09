@@ -8,6 +8,11 @@ import {
   BackHandler,
   SafeAreaView,
 } from 'react-native';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -126,7 +131,10 @@ const styles = StyleSheet.create({
   },
   gradientHeader: {
     width: '100%',
-    paddingVertical: 10,
+    // paddingVertical: 10,
+    height: Platform.OS === 'ios' ? responsiveHeight(8) : responsiveHeight(6),
+    justifyContent: 'center',
+
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,

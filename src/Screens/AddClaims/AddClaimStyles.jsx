@@ -1,5 +1,10 @@
 import {StyleSheet} from 'react-native';
 import {colors} from '../../Assets/colors';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,13 +14,14 @@ export const styles = StyleSheet.create({
   // header style
   gradientHeader: {
     width: '100%',
-    paddingVertical: 10,
+    // paddingVertical: 10,
+    height: Platform.OS === 'ios' ? responsiveHeight(8) : responsiveHeight(6),
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 5,
-    height:60
   },
 
   headerContainer: {

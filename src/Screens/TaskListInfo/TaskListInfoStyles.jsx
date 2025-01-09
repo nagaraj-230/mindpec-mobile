@@ -1,5 +1,10 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import {colors} from '../../Assets/colors';
+import {
+  responsiveHeight,
+  responsiveWidth,
+  responsiveFontSize,
+} from 'react-native-responsive-dimensions';
 
 export const styles = StyleSheet.create({
   container: {
@@ -11,7 +16,9 @@ export const styles = StyleSheet.create({
 
   gradientHeader: {
     width: '100%',
-    paddingVertical: 10,
+    // paddingVertical: 10,
+    height: Platform.OS === 'ios' ? responsiveHeight(8) : responsiveHeight(6),
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
@@ -21,20 +28,20 @@ export const styles = StyleSheet.create({
 
   headerContainer: {
     flexDirection: 'row',
-    justifyContent: 'center', 
+    justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    position: 'relative', 
+    position: 'relative',
   },
 
   backButton: {
-    position: 'absolute', 
-    left: 0, 
-    padding: 10, 
+    position: 'absolute',
+    left: 0,
+    padding: 10,
   },
 
   centerContainer: {
-    flex: 1, 
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -83,12 +90,11 @@ export const styles = StyleSheet.create({
     color: '#333',
     fontWeight: '400',
   },
-  dateValue:{
+  dateValue: {
     fontSize: 16,
     color: '#333',
     fontWeight: '400',
     marginBottom: 8,
-
   },
   input: {
     fontSize: 16,
@@ -150,9 +156,7 @@ export const styles = StyleSheet.create({
   },
 
   // task
-  
 });
-
 
 // const {
 //     taskName: initialTaskName,

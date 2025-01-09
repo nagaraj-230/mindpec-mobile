@@ -16,13 +16,14 @@ export const styles = StyleSheet.create({
   // header
   gradientHeader: {
     width: '100%',
-    paddingVertical: 10,
+    // paddingVertical: 10,
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 6,
     elevation: 5,
-    height:60
+    height: Platform.OS === 'ios' ? responsiveHeight(8) : responsiveHeight(6),
   },
 
   headerContainer: {
@@ -156,13 +157,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-
   },
   addClaimButton: {
     borderRadius: 10,
     overflow: 'hidden',
     elevation: 5,
-
   },
   addClaimGradient: {
     flexDirection: 'row',
@@ -170,11 +169,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     // paddingVertical: 8,
     // paddingHorizontal: 10,
-    height:40,
-    width:130,
-   
+    height: 40,
+    width: 130,
 
-    borderRadius: 20,
+    borderRadius: 10,
     shadowColor: '#000', // iOS shadow
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,

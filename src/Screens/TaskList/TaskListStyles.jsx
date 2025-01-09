@@ -17,8 +17,10 @@ export const styles = StyleSheet.create({
 
   gradientHeader: {
     width: '100%',
-    paddingVertical: 10,
-    height:60,
+    // paddingVertical: 10,
+    // height:60,
+    height: Platform.OS === 'ios' ? responsiveHeight(8) : responsiveHeight(6),
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
@@ -63,8 +65,8 @@ export const styles = StyleSheet.create({
 
   // render items
   taskContainer: {
-    flex:1,
-    backgroundColor:'red',
+    flex: 1,
+    backgroundColor: 'red',
     // marginBottom: 15,
     marginBottom: responsiveHeight(1.5),
     borderRadius: 10,
@@ -73,7 +75,7 @@ export const styles = StyleSheet.create({
   },
 
   gradientCard: {
-   flexDirection: 'row',
+    flexDirection: 'row',
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
@@ -83,7 +85,6 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     backgroundColor: '#fff', // Fallback for gradient
-  
   },
 
   leftSection: {
@@ -121,7 +122,7 @@ export const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 5,
     flexWrap: 'wrap',
-    overflow: 'hidden', // Prevent text overflow
+    overflow: 'hidden',
   },
 
   infoText: {
