@@ -1,13 +1,13 @@
 import API from '../../Api/Api';
-import {GET_CATEGORIES} from '../../Api/ApiPath';
+import {DASHBOARD_TASK_COUNT} from '../../Api/ApiPath';
 
 
-export const getCategoriesApi = async payload => {
-    // console.log('getTaskStatus:', GET_CATEGORIES, 'PayLoad:', JSON.stringify(payload));
+export const dashboardCountApi = async payload => {
+    // console.log('getTaskStatus:', DASHBOARD_TASK_COUNT, 'PayLoad:', JSON.stringify(payload));
   
     try {
-      const response = await API.post(GET_CATEGORIES, payload);
-    //   console.log('GET_CATEGORIES API response:', JSON.stringify(response.data));
+      const response = await API.post(DASHBOARD_TASK_COUNT, payload);
+    //   console.log('DASHBOARD_TASK_COUNT API response:', JSON.stringify(response.data));
       return response.data;
     } catch (error) {
       const errorMessage =

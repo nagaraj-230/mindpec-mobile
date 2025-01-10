@@ -1,4 +1,3 @@
-// current screen design
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -24,20 +23,29 @@ import LoadingComponent from '../../Components/LoadingComponent';
 import {setIsLoading} from '../../Services/LoginService/LoginSlice';
 import {GetCatogeroiesThnuk} from '../../Services/CategeoriesService/GetCategoriesSlice';
 import {GetClaimsThunk} from '../../Services/GetClaimsService/GetClaimsSlice';
+import {DashboardCountThunk} from '../../Services/DashBoardTaskCount/DashBoardCountSlice';
 
 const DashBoardScreen = ({route, navigation}) => {
   const {userName} = route.params || {userName: ''}; // Retrieve userName from route params
 
   const dispatch = useDispatch();
   const {taskStatusData, isLoading} = useSelector(state => state.getTaskStatus);
-  // console.log('taskStatusData', taskStatusData);
+  console.log('taskStatusData', taskStatusData);
   const {tasksData} = useSelector(state => state.getTasks);
+  console.log('tasksData', tasksData);
+  const {catogriesData} = useSelector(state => state.getCatogeroies);
+  console.log('catogriesData', catogriesData);
   const {getClaimsData} = useSelector(state => state.getClaims);
   const totalClaims = getClaimsData?.length || 0;
 
+  const {countData} = useSelector(state => state.dashboardcount);
+  console.log('countData', countData);
   const [dashboardData, setDashboardData] = useState([]);
-  const [taskCounts, setTaskCounts] = useState({});
+  // const [taskCounts, setTaskCounts] = useState({});
   const [userNameState, setUserNameState] = useState(userName);
+
+  const [taskCount, setTotalCount] = useState({});
+  console.log('taskCount', taskCount);
 
   useEffect(() => {
     if (taskStatusData) {
@@ -45,29 +53,19 @@ const DashBoardScreen = ({route, navigation}) => {
     }
   }, [taskStatusData]);
 
-  // Calculate Task Counts
   useEffect(() => {
-    if (tasksData && taskStatusData) {
-      const counts = taskStatusData.reduce((acc, status) => {
-        // Skip counting for Claims
-        if (status.TaskStatusID === 7) {
-          acc[status.TaskStatusID] = null; // Do not show count for Claims
-          return acc;
-        }
-
-        const count = tasksData.filter(
-          task =>
-            task.TaskStatusID === status.TaskStatusID &&
-            task.TaskStatusName === status.TaskStatusName,
-        ).length;
-
-        acc[status.TaskStatusID] = count;
+    if (countData) {
+      const calculatedCounts = countData.reduce((acc, item) => {
+        Object.keys(item).forEach(key => {
+          if (key.startsWith('ID')) {
+            acc[key] = (acc[key] || 0) + item[key];
+          }
+        });
         return acc;
       }, {});
-
-      setTaskCounts(counts);
+      setTotalCount(calculatedCounts);
     }
-  }, [tasksData, taskStatusData]);
+  }, [countData]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -97,8 +95,9 @@ const DashBoardScreen = ({route, navigation}) => {
   useEffect(() => {
     getTaskStatusList();
     getCatogeroies();
-    // getTasksList();
-    // fetchClaims();
+    getTasksList();
+    fetchClaims();
+    fetchDashboardCount();
   }, []);
 
   const getTaskStatusList = async () => {
@@ -116,33 +115,19 @@ const DashBoardScreen = ({route, navigation}) => {
   const getCatogeroies = async () => {
     const payload = {CategoryID: 0};
     const response = await dispatch(GetCatogeroiesThnuk({payload}));
-    // console.log('responseCato', response);
+    console.log('responseCato', response);
   };
 
-  const iconMapping = {
-    1: {icon: 'edit', color: '#FFA500'},
-    2: {icon: 'hourglass-empty', color: '#1E90FF'},
-    3: {icon: 'folder', color: '#FF8C00'},
-    4: {icon: 'check-circle', color: '#32CD32'},
-    5: {icon: 'search', color: '#6A5ACD'},
-    6: {icon: 'priority-high', color: '#6A5ACD'},
-  };
+  const fetchDashboardCount = async () => {
+    const getUserData = await getData('user');
+    // console.log('getUserData:', getUserData);
+    const LoginUserID = getUserData?.LoginUserID;
+    const payload = {AppUserID: LoginUserID, CategoryID: 1, TaskStatusID: 0};
 
-  const updatedTaskStatusData = [
-    ...(dashboardData || []),
-    {
-      TaskStatusID: 7,
-      TaskStatusName: 'Claims',
-      icon: 'attach-money',
-      color: '#FF4500',
-    },
-    // {
-    //   TaskStatusID: 8,
-    //   TaskStatusName: 'Overdew Items',
-    //   icon: 'warning',
-    //   color: '#FF4500',
-    // },
-  ];
+    console.log('paylodcount', payload);
+    const response = await dispatch(DashboardCountThunk({payload}));
+    console.log('responseCount', response);
+  };
 
   const getTasksList = async () => {
     setIsLoading(true);
@@ -178,11 +163,36 @@ const DashBoardScreen = ({route, navigation}) => {
     // console.log('GetClaimsThunkResponse',response)
   };
 
+  const iconMapping = {
+    1: {icon: 'edit', color: '#FFA500'},
+    2: {icon: 'hourglass-empty', color: '#1E90FF'},
+    3: {icon: 'folder', color: '#FF8C00'},
+    4: {icon: 'check-circle', color: '#32CD32'},
+    5: {icon: 'search', color: '#6A5ACD'},
+    6: {icon: 'priority-high', color: '#6A5ACD'},
+  };
+
+  const updatedTaskStatusData = [
+    ...(dashboardData || []),
+    {
+      TaskStatusID: 7,
+      TaskStatusName: 'Claims',
+      icon: 'attach-money',
+      color: '#FF4500',
+    },
+  ];
+
   const handleCardPress = (id, title) => {
     if (id === 7) {
       navigation.navigate('claims');
     } else {
-      navigation.navigate('tasklistscreen', {id, title});
+      navigation.navigate('tasklistscreen', {
+        id,
+        title,
+        // DashTaskStatusID: id,
+        // DashTaskStatusName: title,
+      });
+      // console.log('id and status name',id,title)
       // navigation.navigate('catoscreen', {id, title,});
     }
   };
@@ -192,12 +202,6 @@ const DashBoardScreen = ({route, navigation}) => {
     await clearData();
     navigation.navigate('login');
   };
-
-  const filteredTaskStatusData = updatedTaskStatusData.filter(
-    item =>
-      !(item.TaskStatusID === 7 && taskCounts[item.TaskStatusID] === null),
-  );
-  console.log('Filtered Data:', filteredTaskStatusData);
 
   return (
     <>
@@ -233,13 +237,14 @@ const DashBoardScreen = ({route, navigation}) => {
               {/* Task Status Cards */}
               <View style={styles.innerContainer}>
                 <FlatList
-                  data={filteredTaskStatusData}
+                  data={updatedTaskStatusData}
                   renderItem={({item}) => {
                     const {icon, color} = iconMapping[item.TaskStatusID] || {
                       icon: item.icon,
                       color: item.color,
                     };
-                    const count = taskCounts[item.TaskStatusID];
+                    // const count = taskCounts[item.TaskStatusID];
+                    const count = taskCount[item.TaskStatusID];
 
                     return (
                       <TouchableOpacity
@@ -252,20 +257,28 @@ const DashBoardScreen = ({route, navigation}) => {
                         }
                         activeOpacity={0.9}>
                         {/* Count Badge */}
-                        {count !== null && (
+                        {/* {count !== null && (
                           <View style={styles.countBadge}>
                             {item.TaskStatusID === 7 ? (
                               // Show totalClaims for Claims card
-                              // <Text style={styles.countText}>{totalClaims}</Text>
-                              <Text style={styles.countText}>{1}</Text>
+                              <Text style={styles.countText}>
+                                {totalClaims}
+                              </Text>
                             ) : (
+                              // <Text style={styles.countText}>{1}</Text>
                               // Show count for other cards
-                              // <Text style={styles.countText}>{count}</Text>
-                              <Text style={styles.countText}>{1}</Text>
+                              <Text style={styles.countText}>{count}</Text>
+                              // <Text style={styles.countText}>{1}</Text>
                             )}
                           </View>
-                        )}
-
+                        )} */}
+                        <View style={styles.countBadge}>
+                          <Text style={styles.countText}>
+                            {item.TaskStatusID === 7
+                              ? totalClaims
+                              : taskCount[`ID${item.TaskStatusID}`] || 0}
+                          </Text>
+                        </View>
                         {/* Task Name */}
 
                         <Text
@@ -301,7 +314,6 @@ const DashBoardScreen = ({route, navigation}) => {
 };
 
 export default DashBoardScreen;
-
 
 // renderItem={({item}) => {
 //   const count = taskCounts[item.TaskStatusID];
@@ -369,3 +381,39 @@ export default DashBoardScreen;
 //     </TouchableOpacity>
 //   );
 // }}
+
+// Calculate Task Counts
+// useEffect(() => {
+//   if (tasksData && taskStatusData && countData) {
+//     console.log('taskStatusData:', taskStatusData);
+
+//     // Loop through taskStatusData to filter tasks based on TaskStatusID and TaskStatusName
+//     taskStatusData.forEach((status) => {
+//       // Here, we're iterating through taskStatusData and using each status to filter tasks
+//       const taskStatus = status;
+
+//       console.log('TaskStatusID:', taskStatus.TaskStatusID, 'TaskStatusName:', taskStatus.TaskStatusName);
+
+//       // Filter tasks based on TaskStatusID and TaskStatusName
+//       const filteredTasks = tasksData.filter(task => {
+//         return task.TaskStatusID === taskStatus.TaskStatusID && task.TaskStatusName === taskStatus.TaskStatusName;
+//       });
+
+//       console.log('filteredTasks for TaskStatusID:', taskStatus.TaskStatusID, filteredTasks);
+//       // setLocalTasks(filteredTasks);
+
+//       // Find the corresponding count from countData
+//       const countInfo = countData.find(item => item.CategoryID === taskStatus.TaskStatusID);
+//       if (countInfo) {
+//         const taskCount = countInfo[`ID${taskStatus.TaskStatusID}`] || 0;
+//         console.log('TaskStatusID Count:', taskStatus.TaskStatusID,'taskCount ',  taskCount);
+//         setTaskCount(prevState => ({
+//           ...prevState,
+//           [taskStatus.TaskStatusID]: taskCount
+//         })); // Update the task count for each TaskStatusID
+//       }
+//     });
+
+//     setIsLoading(false);
+//   }
+// }, [tasksData, countData, taskStatusData]);

@@ -265,15 +265,15 @@ const TaskListInfoScreen = ({route, navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  // backgroundColor: 'cyan',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   width: '100%',
-                  height: '20%',
+                  // paddingHorizontal: 10, // Add padding for better spacing
+                  flexWrap: 'wrap', // Allow wrapping for content
                 }}>
-                <View>
-                  <Text style={[styles.taskName, {width: '100%'}]}>
-                    {taskName}
+                <View style={{flex: 1, marginRight: 10}}>
+                  <Text style={[styles.taskName]}>
+                    {taskName} {/* Full task name without truncation */}
                   </Text>
                 </View>
                 <View
@@ -368,15 +368,15 @@ const TaskListInfoScreen = ({route, navigation}) => {
               <View
                 style={{
                   flexDirection: 'row',
-                  // backgroundColor: 'cyan',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   width: '100%',
-                  height: '15%',
+                  // paddingHorizontal: 10, // Add padding for better spacing
+                  flexWrap: 'wrap', // Allow wrapping for content
                 }}>
-                <View>
-                  <Text style={[styles.taskName, {width: '100%'}]}>
-                    {taskName}
+                <View style={{flex: 1, marginRight: 10}}>
+                  <Text style={[styles.taskName]}>
+                    {taskName} {/* Full task name without truncation */}
                   </Text>
                 </View>
                 <View
@@ -384,11 +384,6 @@ const TaskListInfoScreen = ({route, navigation}) => {
                     padding: 10,
                     backgroundColor: colors.btncolor,
                     borderRadius: 8,
-                    // shadowColor: '#000',
-                    // shadowOffset: {width: 0, height: 2},
-                    // shadowOpacity: 0.1,
-                    // shadowRadius: 4,
-                    // elevation: 3,
                     justifyContent: 'center',
                     width: 'auto',
                   }}>

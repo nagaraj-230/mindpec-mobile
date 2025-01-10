@@ -222,3 +222,6 @@ export const styles = StyleSheet.create({
 // row: {
 //   justifyContent: 'space-between',
 // },
+//}
+
+

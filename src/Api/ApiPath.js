@@ -9,6 +9,10 @@ export const UPDATE_TASKS = BASE_URL + 'AppUpdateTasks'
 // AppUpdateTasks-- {"TaskID":1,"CompanyID":1,"ClientID":1,"TaskName":"Task1","TaskCreationDate":"2024-11-26","TaskStartDate":"2024-11-26","TaskEndDate":"2024-11-30",
 //     "TaskDescription":"Task Creation","PriorityID":1,"TargetValue":10,"AchievedValue":7.5,"UOM_ID":1,"StatusID":1,"AppUserID":1}
     
+// dashbaord
+export const DASHBOARD_TASK_COUNT = BASE_URL + 'AppDashboard'
+
+
 // claims screen
 export const CLAIMS_TYPE = BASE_URL + 'AppGetClaimType'
 export const GET_CLAIMS = BASE_URL + 'AppGetClaims'

@@ -28,6 +28,7 @@ import getClaimStatusSlice from '../Services/GetClaimStatusService/GetClaimStatu
 import getCompanyUsersSlice from '../Services/CompanyUserService/GetCompanyUserSlice';
 import GetCatogeriosSlice from '../Services/CategeoriesService/GetCategoriesSlice';
 import GetTaskAssignmentSlice from '../Services/GetTaskAssignments/GetTaskAssignmentSlice';
+import DashboardCountSlice from '../Services/DashBoardTaskCount/DashBoardCountSlice';
 
 // Redux Persist configuration
 const persistConfig = {
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
   getClaimStatus: getClaimStatusSlice,
   getCompanyUsers: getCompanyUsersSlice,
   getTaskAssignment: GetTaskAssignmentSlice,
+  dashboardcount:DashboardCountSlice
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

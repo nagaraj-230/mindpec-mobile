@@ -18,13 +18,22 @@ import {getData} from '../../Utils/localHelper';
 import LoadingComponent from '../../Components/LoadingComponent';
 
 const TaskListScreen = ({route, navigation}) => {
-  const {id, title} = route.params || {id: null, title: ''};
+  // const {DashTaskStatusID, DashTaskStatusName} = route.params || {
+  //   DashTaskStatusID: null,
+  //   DashTaskStatusName: '',
+  // };
+  const {id, title} = route.params || {
+    id: null,
+    title: '',
+  };
+  console.log('Dashboard route data', id, title);
 
   const dispatch = useDispatch();
   const {tasksData} = useSelector(state => state.getTasks);
+  // console.log('tasksData', tasksData);
   const isLoader = useSelector(state => state.login.isLoader);
   const [localTasks, setLocalTasks] = useState([]);
-  // console.log('localTasks', localTasks);
+  console.log('localTasks', localTasks);
 
   const [isLoading, setIsLoading] = useState(true); // Local loading state
 
@@ -47,20 +56,23 @@ const TaskListScreen = ({route, navigation}) => {
     };
   }, [navigation]);
 
-  // useEffect(() => {
-  //   if (tasksData) {
-  //     setLocalTasks(tasksData);
-  //     setIsLoading(false);
-  //   }
-  // }, [tasksData]);
-
   useEffect(() => {
     if (tasksData) {
-      // Filter tasks based on TaskStatusID and TaskStatusName
-      const filteredTasks = tasksData.filter(
-        task => task.TaskStatusID === id && task.TaskStatusName === title,
-      );
+      console.log('RouteID:', id, 'RouteStatusName:', title);
 
+      // Filter tasks based on TaskStatusID and TaskStatusName
+      console.log('tasksData', tasksData);
+      const filteredTasks = tasksData.filter(task => {
+        console.log(
+          'TaskStatusID:',
+          task.TaskStatusID,
+          'TaskStatusName:',
+          task.TaskStatusName,
+        );
+        return task.TaskStatusID === id, task.TaskStatusName === title;
+      });
+
+      console.log('filteredTasks', filteredTasks);
       setLocalTasks(filteredTasks);
       setIsLoading(false);
     }
@@ -80,9 +92,9 @@ const TaskListScreen = ({route, navigation}) => {
       AppUserID: LoginUserID,
     };
 
-    console.log('GetTasksPayload', payload);
+    // console.log('GetTasksPayload', payload);
     const response = await dispatch(GetTasksThunk({payload}));
-    console.log('GetTasksThunk Response:', response.payload);
+    // console.log('GetTasksThunk Response:', response.payload);
     // const fetchedTasks = response.payload || [];
     // setLocalTasks(fetchedTasks);
     // setIsLoading(false); // Stop loading
@@ -102,94 +114,89 @@ const TaskListScreen = ({route, navigation}) => {
   };
 
   const renderItem = ({item}) => (
-   
-      <View
-        colors={['#f9f9f9', '#e6e6e6']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 1}}
-        style={styles.gradientCard}>
-        <View style={styles.leftSection}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: 5,
-            }}>
-            <Text style={styles.taskName}>{item.TaskName}</Text>
-            <Text style={[styles.taskName, {marginLeft: 10}]}>
-              {`[ ${item.CategoryName} ]`}
-            </Text>
-          </View>
-
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Date: </Text>
-            {dayjs(item.TaskCreationDate).format('YYYY-MM-DD')}
+    <View
+      colors={['#f9f9f9', '#e6e6e6']}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+      style={styles.gradientCard}>
+      <View style={styles.leftSection}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 5,
+          }}>
+          <Text style={styles.taskName}>{item.TaskName}</Text>
+          <Text style={[styles.taskName, {marginLeft: 10}]}>
+            {`[ ${item.CategoryName} ]`}
           </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Client Name: </Text>
-            {item.ClientName}
-          </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>Start Date: </Text>
-            {dayjs(item.TaskStartDate).format('YYYY-MM-DD')}
-          </Text>
-          <Text style={styles.infoText}>
-            <Text style={styles.label}>End Date: </Text>
-            {dayjs(item.TaskEndDate).format('YYYY-MM-DD')}
-          </Text>
-
-          <View style={styles.row}>
-            <View
-              style={[
-                styles.priorityBadge,
-                {
-                  backgroundColor:
-                    priorityColors[item.PriorityName] || '#58d68d',
-                },
-              ]}>
-              <Text style={styles.badgeText}>
-                {item.PriorityName || 'Unknown'}
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.statusBadge,
-                {
-                  backgroundColor: statusColors[item.StatusName] || '#58d68d',
-                },
-              ]}>
-              <Text style={styles.badgeText}>
-                {item.StatusName || 'Unknown'}
-              </Text>
-            </View>
-          </View>
         </View>
 
-        <View style={styles.rightSection}>
-          {/* History Icon */}
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() =>
-              navigation.navigate('taskhistoryscreen', {taskId: item.TaskID})
-            }>
-            <Icon name="event-note" size={24} color="#FFF" />
-          </TouchableOpacity>
+        <Text style={styles.infoText}>
+          <Text style={styles.label}>Date: </Text>
+          {dayjs(item.TaskCreationDate).format('YYYY-MM-DD')}
+        </Text>
+        <Text style={styles.infoText}>
+          <Text style={styles.label}>Client Name: </Text>
+          {item.ClientName}
+        </Text>
+        <Text style={styles.infoText}>
+          <Text style={styles.label}>Start Date: </Text>
+          {dayjs(item.TaskStartDate).format('YYYY-MM-DD')}
+        </Text>
+        <Text style={styles.infoText}>
+          <Text style={styles.label}>End Date: </Text>
+          {dayjs(item.TaskEndDate).format('YYYY-MM-DD')}
+        </Text>
 
-          {/* Task Info Icon */}
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={() =>
-              navigation.navigate('tasklistsinfoscreen', {
-                tasklistinfo: item,
-                id,
-                title,
-              })
-            }>
-            <Icon name="visibility" size={24} color="#FFF" />
-          </TouchableOpacity>
+        <View style={styles.row}>
+          <View
+            style={[
+              styles.priorityBadge,
+              {
+                backgroundColor: priorityColors[item.PriorityName] || '#58d68d',
+              },
+            ]}>
+            <Text style={styles.badgeText}>
+              {item.PriorityName || 'Unknown'}
+            </Text>
+          </View>
+          <View
+            style={[
+              styles.statusBadge,
+              {
+                backgroundColor: statusColors[item.StatusName] || '#58d68d',
+              },
+            ]}>
+            <Text style={styles.badgeText}>{item.StatusName || 'Unknown'}</Text>
+          </View>
         </View>
       </View>
 
+      <View style={styles.rightSection}>
+        {/* History Icon */}
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() =>
+            navigation.navigate('taskhistoryscreen', {taskId: item.TaskID})
+          }>
+          <Icon name="event-note" size={24} color="#FFF" />
+        </TouchableOpacity>
+
+        {/* Task Info Icon */}
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={() =>
+            navigation.navigate('tasklistsinfoscreen', {
+              tasklistinfo: item,
+              id,
+              title,
+            })
+          }>
+          <Icon name="visibility" size={24} color="#FFF" />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 
   const noRenderData = () => {
@@ -231,7 +238,7 @@ const TaskListScreen = ({route, navigation}) => {
                 </View>
               </View>
             </LinearGradient>
-   
+
             <FlatList
               data={localTasks}
               renderItem={renderItem}
