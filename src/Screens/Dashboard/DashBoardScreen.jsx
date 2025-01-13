@@ -89,13 +89,13 @@ const DashBoardScreen = ({route, navigation}) => {
       backAction,
     );
 
-    return () => backHandler.remove(); // Clean up listener on unmount
+    return () => backHandler.remove(); 
   }, []);
 
   useEffect(() => {
     getTaskStatusList();
-    getCatogeroies();
-    getTasksList();
+    // getCatogeroies();
+    // getTasksList();
     fetchClaims();
     fetchDashboardCount();
   }, []);
@@ -115,7 +115,7 @@ const DashBoardScreen = ({route, navigation}) => {
   const getCatogeroies = async () => {
     const payload = {CategoryID: 0};
     const response = await dispatch(GetCatogeroiesThnuk({payload}));
-    console.log('responseCato', response);
+    // console.log('responseCato', response);
   };
 
   const fetchDashboardCount = async () => {
@@ -124,9 +124,9 @@ const DashBoardScreen = ({route, navigation}) => {
     const LoginUserID = getUserData?.LoginUserID;
     const payload = {AppUserID: LoginUserID, CategoryID: 1, TaskStatusID: 0};
 
-    console.log('paylodcount', payload);
+    // console.log('paylodcount', payload);
     const response = await dispatch(DashboardCountThunk({payload}));
-    console.log('responseCount', response);
+    // console.log('responseCount', response);
   };
 
   const getTasksList = async () => {
@@ -381,39 +381,3 @@ export default DashBoardScreen;
 //     </TouchableOpacity>
 //   );
 // }}
-
-// Calculate Task Counts
-// useEffect(() => {
-//   if (tasksData && taskStatusData && countData) {
-//     console.log('taskStatusData:', taskStatusData);
-
-//     // Loop through taskStatusData to filter tasks based on TaskStatusID and TaskStatusName
-//     taskStatusData.forEach((status) => {
-//       // Here, we're iterating through taskStatusData and using each status to filter tasks
-//       const taskStatus = status;
-
-//       console.log('TaskStatusID:', taskStatus.TaskStatusID, 'TaskStatusName:', taskStatus.TaskStatusName);
-
-//       // Filter tasks based on TaskStatusID and TaskStatusName
-//       const filteredTasks = tasksData.filter(task => {
-//         return task.TaskStatusID === taskStatus.TaskStatusID && task.TaskStatusName === taskStatus.TaskStatusName;
-//       });
-
-//       console.log('filteredTasks for TaskStatusID:', taskStatus.TaskStatusID, filteredTasks);
-//       // setLocalTasks(filteredTasks);
-
-//       // Find the corresponding count from countData
-//       const countInfo = countData.find(item => item.CategoryID === taskStatus.TaskStatusID);
-//       if (countInfo) {
-//         const taskCount = countInfo[`ID${taskStatus.TaskStatusID}`] || 0;
-//         console.log('TaskStatusID Count:', taskStatus.TaskStatusID,'taskCount ',  taskCount);
-//         setTaskCount(prevState => ({
-//           ...prevState,
-//           [taskStatus.TaskStatusID]: taskCount
-//         })); // Update the task count for each TaskStatusID
-//       }
-//     });
-
-//     setIsLoading(false);
-//   }
-// }, [tasksData, countData, taskStatusData]);
