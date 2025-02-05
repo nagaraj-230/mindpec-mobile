@@ -92,7 +92,7 @@ const TaskListScreen = ({route, navigation}) => {
       AppUserID: LoginUserID,
     };
 
-    // console.log('GetTasksPayload', payload);
+    console.log('GetTasksPayload', payload);
     const response = await dispatch(GetTasksThunk({payload}));
     // console.log('GetTasksThunk Response:', response.payload);
     // const fetchedTasks = response.payload || [];

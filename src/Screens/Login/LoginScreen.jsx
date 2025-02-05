@@ -64,7 +64,7 @@ const LoginScreen = ({navigation}) => {
       LoginID: email,
       LoginPassword: password,
     };
-
+console.log('Loginpayload',payload)
     try {
       const response = await dispatch(
         LoginThunk({navigation, payload}),

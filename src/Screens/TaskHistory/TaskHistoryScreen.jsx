@@ -27,7 +27,7 @@ const TaskHistoryScreen = ({route, navigation}) => {
   const [historyData, setHistoryData] = useState([]);
   // Select the task history data from Redux
   const {getTaskHistroyData} = useSelector(state => state.getTaskStatusHistory);
-  console.log('Redux Data:', getTaskHistroyData);
+  // console.log('Redux Data:', getTaskHistroyData);
 
   // useEffect(() => {
   //   const backHandler = BackHandler.addEventListener(
@@ -57,7 +57,7 @@ const TaskHistoryScreen = ({route, navigation}) => {
       AppUserID: LoginUserID,
     };
 
-    // console.log('Dispatching History Payload:', payload);
+    console.log('Dispatching History Payload:', payload);
     const response = await dispatch(
       GetTaskStatusHistoryThunk({navigation, payload}),
     );

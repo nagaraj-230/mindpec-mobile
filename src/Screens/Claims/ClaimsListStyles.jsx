@@ -92,6 +92,14 @@ export const styles = StyleSheet.create({
     marginBottom: responsiveHeight(0.8),
     flexWrap: 'wrap',
   },
+  datePadding: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    // backgroundColor: 'cyan',
+    // marginLeft: 70,
+    marginLeft: responsiveWidth(16),
+  },
   columnItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -197,7 +205,13 @@ export const styles = StyleSheet.create({
     marginTop: 3,
     marginLeft: 8,
   },
-
+  infoText2: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginTop: 3,
+    // marginLeft: 8,
+  },
   // modal style props
   modalContainer: {
     flex: 1,

@@ -173,7 +173,10 @@ const DashBoardScreen = ({route, navigation}) => {
   };
 
   const updatedTaskStatusData = [
-    ...(dashboardData || []),
+    // ...(dashboardData || []),
+    ...(dashboardData || []).filter(
+      item => item.TaskStatusName !== 'Hold' && item.TaskStatusName !== 'To Review for Mgmt'
+    ),
     {
       TaskStatusID: 7,
       TaskStatusName: 'Claims',
@@ -257,21 +260,7 @@ const DashBoardScreen = ({route, navigation}) => {
                         }
                         activeOpacity={0.9}>
                         {/* Count Badge */}
-                        {/* {count !== null && (
-                          <View style={styles.countBadge}>
-                            {item.TaskStatusID === 7 ? (
-                              // Show totalClaims for Claims card
-                              <Text style={styles.countText}>
-                                {totalClaims}
-                              </Text>
-                            ) : (
-                              // <Text style={styles.countText}>{1}</Text>
-                              // Show count for other cards
-                              <Text style={styles.countText}>{count}</Text>
-                              // <Text style={styles.countText}>{1}</Text>
-                            )}
-                          </View>
-                        )} */}
+                     
                         <View style={styles.countBadge}>
                           <Text style={styles.countText}>
                             {item.TaskStatusID === 7
@@ -315,6 +304,21 @@ const DashBoardScreen = ({route, navigation}) => {
 
 export default DashBoardScreen;
 
+   {/* {count !== null && (
+                          <View style={styles.countBadge}>
+                            {item.TaskStatusID === 7 ? (
+                              // Show totalClaims for Claims card
+                              <Text style={styles.countText}>
+                                {totalClaims}
+                              </Text>
+                            ) : (
+                              // <Text style={styles.countText}>{1}</Text>
+                              // Show count for other cards
+                              <Text style={styles.countText}>{count}</Text>
+                              // <Text style={styles.countText}>{1}</Text>
+                            )}
+                          </View>
+                        )} */}
 // renderItem={({item}) => {
 //   const count = taskCounts[item.TaskStatusID];
 

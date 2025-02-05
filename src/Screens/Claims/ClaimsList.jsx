@@ -80,80 +80,81 @@ const ClaimsList = ({route, navigation}) => {
   };
 
   const renderItem = ({item}) => (
+    <View
+      colors={['#ffffff', '#f4f4f4']}
+      start={{x: 0, y: 0}}
+      end={{x: 1, y: 1}}
+      style={styles.gradientCard}>
+      {/* Left Section - Info */}
+      <View style={styles.infoSection}>
+        <View style={styles.infoRow}>
+          <FeatherIcon name="user" size={20} color="#FF6A00" />
+          <Text style={styles.infoText}>{item.ClaimUserName}</Text>
+        </View>
 
-      <View
-        colors={['#ffffff', '#f4f4f4']}
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 1}}
-        style={styles.gradientCard}>
-        {/* Left Section - Info */}
-        <View style={styles.infoSection}>
-          <View style={styles.infoRow}>
-            <FeatherIcon name="user" size={20} color="#FF6A00" />
-            <Text style={styles.infoText}>{item.ClaimUserName}</Text>
-          </View>
-
-          <View style={styles.infoRow}>
+        <View style={styles.infoRow}>
+          <Icon name="numbers" size={20} color="#FF6A00" />
+          <Text style={styles.infoText2}>{item.ClaimNumber}</Text>
+          <View style={styles.datePadding}>
             <FeatherIcon name="calendar" size={20} color="#FF6A00" />
             <Text style={styles.infoText}>{item.ClaimDate.split('T')[0]}</Text>
           </View>
+        </View>
 
-          <View style={styles.infoRow}>
-            <View style={styles.columnItem}>
-              <FeatherIcon name="dollar-sign" size={20} color="#FF6A00" />
-              <Text style={[styles.infoText, {width: 70}]}>
-                {item.ClaimAmount}
-              </Text>
-            </View>
-            <View style={styles.columnItem}>
-              <FeatherIcon name="briefcase" size={20} color="#FF6A00" />
-              <Text style={styles.infoText}>{item.ClaimTypeName}</Text>
-            </View>
-          </View>
-
-          <View style={styles.infoRow}>
-            <FeatherIcon name="message-square" size={20} color="#FF6A00" />
-            <Text style={styles.infoText} numberOfLines={1}>
-              {item.ClaimRemarks}
+        <View style={styles.infoRow}>
+          <View style={styles.columnItem}>
+            <FeatherIcon name="dollar-sign" size={20} color="#FF6A00" />
+            <Text style={[styles.infoText, {width: 70}]}>
+              {item.ClaimAmount}
             </Text>
           </View>
-          {/* Status Badge */}
-          <View
-            style={[
-              styles.statusBadge,
-              {backgroundColor: statusColors[item?.ClaimStatus] || '#58d68d'},
-            ]}>
-            <Text style={styles.badgeText}>{item.ClaimStatus}</Text>
+          <View style={styles.columnItem}>
+            <FeatherIcon name="briefcase" size={20} color="#FF6A00" />
+            <Text style={styles.infoText}>{item.ClaimTypeName}</Text>
           </View>
         </View>
 
-        {/* Right Section - Actions and Status */}
-        <View style={styles.actionSection}>
-          <View style={styles.actionButtons}>
-            <TouchableOpacity
-              style={[
-                styles.iconButton,
-                item.ClaimStatus === 'Approved' && styles.disabledButton,
-              ]}
-              disabled={item.ClaimStatus === 'Approved'}
-              onPress={() =>
-                navigation.navigate('addclaims', {claimData: item})
-              }>
-              <FeatherIcon
-                name="edit-2"
-                size={20}
-                color={item.ClaimStatus === 'Approved' ? '#CCC' : '#FFF'}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.iconButton}
-              onPress={() => handleViewDetails(item)}>
-              <Icon name="visibility" size={24} color="#FFF" />
-            </TouchableOpacity>
-          </View>
+        <View style={styles.infoRow}>
+          <FeatherIcon name="message-square" size={20} color="#FF6A00" />
+          <Text style={styles.infoText} numberOfLines={1}>
+            {item.ClaimRemarks}
+          </Text>
+        </View>
+        {/* Status Badge */}
+        <View
+          style={[
+            styles.statusBadge,
+            {backgroundColor: statusColors[item?.ClaimStatus] || '#58d68d'},
+          ]}>
+          <Text style={styles.badgeText}>{item.ClaimStatus}</Text>
         </View>
       </View>
+
+      {/* Right Section - Actions and Status */}
+      <View style={styles.actionSection}>
+        <View style={styles.actionButtons}>
+          <TouchableOpacity
+            style={[
+              styles.iconButton,
+              item.ClaimStatus === 'Approved' && styles.disabledButton,
+            ]}
+            disabled={item.ClaimStatus === 'Approved'}
+            onPress={() => navigation.navigate('addclaims', {claimData: item})}>
+            <FeatherIcon
+              name="edit-2"
+              size={20}
+              color={item.ClaimStatus === 'Approved' ? '#CCC' : '#FFF'}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => handleViewDetails(item)}>
+            <Icon name="visibility" size={24} color="#FFF" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
   );
 
   return (
@@ -224,11 +225,19 @@ const ClaimsList = ({route, navigation}) => {
                   </View>
                   <View style={styles.divider} />
                   <View style={styles.detailRow}>
+                    <Text style={styles.label}>Claim Id:</Text>
+                    <Text style={styles.value}>
+                      <Text style={styles.value}>{selectedClaim.ClaimNumber}</Text>
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={styles.detailRow}>
                     <Text style={styles.label}>Date:</Text>
                     <Text style={styles.value}>
                       {selectedClaim.ClaimDate.split('T')[0]}
                     </Text>
                   </View>
+
                   <View style={styles.divider} />
                   <View style={styles.detailRow}>
                     <Text style={styles.label}>Amount:</Text>

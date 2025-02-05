@@ -57,7 +57,7 @@ const getTaskStatusHistorySlice = createSlice({
     builder
       .addCase(GetTaskStatusHistoryThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log('Thunk Fulfilled:', action.payload);
+        // console.log('Thunk Fulfilled:', action.payload);
         state.getTaskHistroyData = action.payload;
       })
       .addCase(UpdatedTaskStatusHistoryThunk.fulfilled, (state, action) => {
