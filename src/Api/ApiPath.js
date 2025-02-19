@@ -1,8 +1,13 @@
 // live
 // export const BASE_URL = 'http://154.61.80.116:1075/api/';
-
 // Develpment and Test
-export const BASE_URL = 'http://154.61.80.116:6165/api/'
+// export const BASE_URL = 'http://154.61.80.116:6165/api/'
+
+// new api urls
+//Live - production
+export const BASE_URL = 'http://218.208.86.107:8081/api/';
+// Test - development
+// export const BASE_URL = 'http://218.208.86.107:2021/api/';
 
 export const LOGIN = BASE_URL + 'AppLogin';
 // task list

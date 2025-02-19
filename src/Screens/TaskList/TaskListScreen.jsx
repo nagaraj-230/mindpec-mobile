@@ -33,7 +33,7 @@ const TaskListScreen = ({route, navigation}) => {
   // console.log('tasksData', tasksData);
   const isLoader = useSelector(state => state.login.isLoader);
   const [localTasks, setLocalTasks] = useState([]);
-  console.log('localTasks', localTasks);
+  // console.log('localTasks', localTasks);
 
   const [isLoading, setIsLoading] = useState(true); // Local loading state
 
@@ -42,6 +42,7 @@ const TaskListScreen = ({route, navigation}) => {
       getTasksList();
     });
 
+    // back handler
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
@@ -49,11 +50,25 @@ const TaskListScreen = ({route, navigation}) => {
         return true;
       },
     );
-
     return () => {
       unsubscribe(); // Cleanup navigation listener
       backHandler.remove(); // Cleanup back button listener
     };
+
+    // const backHandler = BackHandler.addEventListener(
+    //   'hardwareBackPress',
+    //   () => {
+    //     if (navigation.canGoBack()) {
+    //       navigation.goBack();
+    //       return true;
+    //     }
+    //     return false; // Prevents unhandled errors
+    //   },
+    // );
+    // return () => {
+    //   if (unsubscribe) unsubscribe();
+    //   BackHandler.removeEventListener('hardwareBackPress', backHandler);
+    // };
   }, [navigation]);
 
   useEffect(() => {
@@ -245,6 +260,7 @@ const TaskListScreen = ({route, navigation}) => {
               keyExtractor={item => item.TaskID.toString()}
               contentContainerStyle={styles.taskList}
               ListEmptyComponent={noRenderData}
+              removeClippedSubviews={false}
             />
           </>
         )}
