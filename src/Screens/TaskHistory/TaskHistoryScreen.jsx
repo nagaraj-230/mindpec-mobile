@@ -48,7 +48,7 @@ const TaskHistoryScreen = ({route, navigation}) => {
   }, []);
 
   const getTaskStatusHistroy = async () => {
-    const getUserData = await getData('user');
+    const getUserData = await getData('userData');
     const LoginUserID = getUserData?.LoginUserID;
 
     const payload = {
@@ -116,6 +116,8 @@ const TaskHistoryScreen = ({route, navigation}) => {
           keyExtractor={item => item.TaskStatusHistoryID.toString()}
           ItemSeparatorComponent={() => <View style={styles.divider} />} // Divider between items
           contentContainerStyle={styles.listContainer}
+          removeClippedSubviews={false}
+
         />
       </View>
     </SafeAreaView>

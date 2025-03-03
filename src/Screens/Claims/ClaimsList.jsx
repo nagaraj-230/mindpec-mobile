@@ -9,6 +9,9 @@ import {
   Modal,
   BackHandler,
   SafeAreaView,
+  Alert,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -19,12 +22,20 @@ import {colors} from '../../Assets/colors';
 import {GetClaimsThunk} from '../../Services/GetClaimsService/GetClaimsSlice';
 import {useSelector, useDispatch} from 'react-redux';
 import {getData} from '../../Utils/localHelper';
+import {DownloadClaimDocumentThunk} from '../../Services/DocumentUploadService/UploadClaimDocumentsSlice';
+import RNFS from 'react-native-fs';
+import {requestStoragePermission} from '../../Utils/permissions';
+import {blobToBase64} from '../../Utils/blobToBase64';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const ClaimsList = ({route, navigation}) => {
   const {id, title} = route.params || {id: null, title: 'Unknown Project'};
   const dispatch = useDispatch();
   const {getClaimsData} = useSelector(state => state.getClaims);
+  const {downloadData} = useSelector(state => state.UploadClaimDocuments);
+
   console.log('getClaimsData', getClaimsData);
+  console.log('downloadData', downloadData);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedClaim, setSelectedClaim] = useState(null);
@@ -50,7 +61,7 @@ const ClaimsList = ({route, navigation}) => {
   );
 
   const fetchGetClaims = async () => {
-    const getUserData = await getData('user');
+    const getUserData = await getData('userData');
     const LoginUserID = getUserData?.LoginUserID;
     const CompanyID = getUserData?.CompanyID;
 
@@ -64,6 +75,50 @@ const ClaimsList = ({route, navigation}) => {
     };
     console.log('claimpayload', payload);
     await dispatch(GetClaimsThunk({payload}));
+  };
+
+  const handleDownloadFile = async claimId => {
+    try {
+      const hasPermission = await requestStoragePermission();
+      if (!hasPermission) {
+        Alert.alert('Permission Denied', 'Storage permission is required.');
+        return;
+      }
+
+      const getUserData = await getData('userData');
+      const LoginUserID = getUserData?.LoginUserID;
+
+      const payload = {
+        ClaimID: claimId,
+        ClaimDocumentID: 0,
+        LoginUserID: LoginUserID,
+      };
+
+      const response = await dispatch(DownloadClaimDocumentThunk({payload}));
+
+      if (response.payload) {
+        const blob = response.payload;
+        let fileName = `TamsClaim_${Date.now()}.png`; // Dynamic name
+        // Define Save Path in Downloads Directory
+        const path = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+
+        console.log(`Saving file as: ${fileName}`);
+
+        //Convert Blob to Base64
+        const base64Data = await blobToBase64(blob);
+
+        // Write File to Downloads Folder
+        await RNFS.writeFile(path, base64Data, 'base64');
+
+        Alert.alert('Download Complete', `File saved at: ${path}`);
+        console.log('File saved at:', path);
+      } else {
+        console.error('No file received');
+      }
+    } catch (error) {
+      console.error('File download error:', error);
+      Alert.alert('Error', 'File download failed.');
+    }
   };
 
   const statusColors = {
@@ -197,6 +252,7 @@ const ClaimsList = ({route, navigation}) => {
           renderItem={renderItem}
           keyExtractor={item => item.ClaimID.toString()}
           contentContainerStyle={styles.taskList}
+          removeClippedSubviews={false}
         />
 
         {/* Modal for Viewing Details */}
@@ -227,7 +283,9 @@ const ClaimsList = ({route, navigation}) => {
                   <View style={styles.detailRow}>
                     <Text style={styles.label}>Claim Id:</Text>
                     <Text style={styles.value}>
-                      <Text style={styles.value}>{selectedClaim.ClaimNumber}</Text>
+                      <Text style={styles.value}>
+                        {selectedClaim.ClaimNumber}
+                      </Text>
                     </Text>
                   </View>
                   <View style={styles.divider} />
@@ -276,7 +334,21 @@ const ClaimsList = ({route, navigation}) => {
                       </Text>
                     </View>
                   </View>
+                  <View style={styles.divider} />
+                  <View style={styles.detailRow}>
+                    <Text style={styles.label}>Download File:</Text>
+                    <View style={[styles.modalStatusBadge]}>
+                      <TouchableOpacity
+                        style={styles.dlodButton}
+                        onPress={() =>
+                          handleDownloadFile(selectedClaim.ClaimID)
+                        }>
+                        <FeatherIcon name="download" size={20} color="#FFF" />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
+
                 <TouchableOpacity
                   style={styles.closeButton}
                   onPress={() => setModalVisible(false)}>

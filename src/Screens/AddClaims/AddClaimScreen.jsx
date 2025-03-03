@@ -25,6 +25,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {getData} from '../../Utils/localHelper';
 import {GetClaimStatusThunk} from '../../Services/GetClaimStatusService/GetClaimStatusSlice';
 import {GetCompanyUsersThunk} from '../../Services/CompanyUserService/GetCompanyUserSlice';
+import {UploadClaimDocumentThunk} from '../../Services/DocumentUploadService/UploadClaimDocumentsSlice';
 
 const AddClaimScreen = ({route, navigation}) => {
   const {claimData} = route.params || {};
@@ -32,10 +33,13 @@ const AddClaimScreen = ({route, navigation}) => {
   const {claimsType} = useSelector(state => state.getClaimType);
   const {getClaimStatusData} = useSelector(state => state.getClaimStatus);
   const {getCompanyUserData} = useSelector(state => state.getCompanyUsers);
+  const {uplaodDocData} = useSelector(state => state.UploadClaimDocuments);
 
+  console.log('claimData', claimData);
   // // console.log('claimStatus', claimStatus);
-  // console.log('getCompanyUserData', getCompanyUserData);
+  console.log('getCompanyUserData', getCompanyUserData);
   // console.log('getClaimStatusData', getClaimStatusData);
+  console.log('uplaodDocData', uplaodDocData);
 
   const [claimStatusData, setClaimStatusData] = useState([]);
   const [companyUsersData, setCompanyUsersData] = useState([]);
@@ -61,7 +65,7 @@ const AddClaimScreen = ({route, navigation}) => {
     claimData ? claimData.ClaimStatusID : null,
   );
   const [companyUserId, setCompanyUserId] = useState(
-    claimData ? claimData.ClaimUserID : null,
+    claimData ? claimData.SubmittedToID : null,
   );
 
   // get current login user
@@ -69,7 +73,7 @@ const AddClaimScreen = ({route, navigation}) => {
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      const userData = await getData('user');
+      const userData = await getData('userData');
       setCurrentUserId(userData?.LoginUserID);
     };
     fetchCurrentUser();
@@ -95,7 +99,7 @@ const AddClaimScreen = ({route, navigation}) => {
   }, [getCompanyUserData]);
 
   const fetchGetClaimType = async () => {
-    const getUserData = await getData('user');
+    const getUserData = await getData('userData');
     const CompanyID = getUserData?.CompanyID;
     const LoginUserID = getUserData?.LoginUserID;
 
@@ -104,7 +108,7 @@ const AddClaimScreen = ({route, navigation}) => {
   };
 
   const fetchClaimStatus = async () => {
-    const getUserData = await getData('user');
+    const getUserData = await getData('userData');
     const payload = {
       ClaimStatusID: 0,
       AppUserID: getUserData?.LoginUserID,
@@ -114,7 +118,7 @@ const AddClaimScreen = ({route, navigation}) => {
     // console.log('fetchClaimStatus', response);
   };
   const fetchCompanyUsers = async () => {
-    const getUserData = await getData('user');
+    const getUserData = await getData('userData');
     const payload = {
       CompanyUserID: 0,
       CompanyID: getUserData?.CompanyID,
@@ -139,7 +143,103 @@ const AddClaimScreen = ({route, navigation}) => {
     setAmount(text);
   };
 
+  //last working
+  // const handleSubmit = async () => {
+  //   const getUserData = await getData('userData');
+  //   console.log('getUserData', getUserData);
+
+  //   if (
+  //     !amount ||
+  //     !expenseType ||
+  //     (!claimStatusId && claimData) ||
+  //     !companyUserId ||
+  //     remarks.length < 5
+  //   ) {
+  //     console.log({
+  //       amount,
+  //       expenseType,
+  //       claimStatusId,
+  //       companyUserId,
+  //       remarks,
+  //     });
+
+  //     if (!remarks || remarks.length < 5) {
+  //       Alert.alert('Error', 'Remarks must be at least 5 characters long.');
+  //     } else {
+  //       Alert.alert('Error', 'Please fill out all fields correctly.');
+  //     }
+  //     return;
+  //   }
+
+  //   // File Upload First
+  //   if (file) {
+  //     const formData = new FormData();
+  //     // formData.append('ClaimID', 2);
+  //     formData.append('ClaimID', 89);
+  //     formData.append('ClaimDocumentID', 0);
+  //     formData.append('LoginUserID', getUserData?.LoginUserID);
+  //     formData.append('files', {
+  //       // uri: file.uri,
+  //       // uri: file.uri.replace('file://', ''),
+  //       uri:
+  //         Platform.OS === 'android'
+  //           ? file.uri.replace('file://', '')
+  //           : file.uri,
+  //       name: file.name,
+  //       type: file.type || 'application/octet-stream',
+  //     });
+
+  //     console.log('Uploading file...', formData);
+
+  //     const uploadResponse = await dispatch(
+  //       UploadClaimDocumentThunk({payload: formData}),
+  //     );
+  //     console.log('document response', uploadResponse);
+
+  //     if (uploadResponse?.meta?.requestStatus === 'fulfilled') {
+  //       Alert.alert('Success', 'File uploaded successfully.');
+  //     } else {
+  //       Alert.alert('Error', 'File upload failed. Please try again.');
+  //     }
+  //   }
+
+  //   const payload = {
+  //     ClaimID: claimData?.ClaimID || 0,
+  //     CompanyID: getUserData?.CompanyID,
+  //     ClaimUserID: getUserData?.LoginUserID,
+  //     SubmittedToID: companyUserId,
+  //     ClaimDate: dayjs(date).format('YYYY-MM-DD'),
+  //     ClaimTypeID: expenseType,
+  //     ClaimAmount: parseFloat(amount),
+  //     ClaimRemarks: remarks,
+  //     ClaimStatusID: claimStatusId || 1,
+  //     AppUserID: getUserData?.LoginUserID,
+  //   };
+  //   // ClaimUserID: companyUserId,
+
+  //   console.log('UpdateClaimspayload', payload);
+
+  //   const response = await dispatch(UpdateClaimsThunk({payload}));
+  //   console.log('UpdateClaimsRes', response);
+  //   if (response?.meta?.requestStatus === 'fulfilled') {
+  //     if (payload.ClaimID === 0) {
+  //       // New claim added
+  //       Alert.alert('Success', 'Claim saved successfully.');
+  //     } else {
+  //       // Claim updated
+  //       Alert.alert('Success', 'Claim updated successfully.');
+  //     }
+  //     resetForm();
+  //     navigation.goBack();
+  //   } else {
+  //     Alert.alert('Error', 'Failed to save claim.');
+  //   }
+  // };
+
+  // modified handle submit
   const handleSubmit = async () => {
+    const getUserData = await getData('userData');
+
     if (
       !amount ||
       !expenseType ||
@@ -162,12 +262,11 @@ const AddClaimScreen = ({route, navigation}) => {
       }
       return;
     }
-    const getUserData = await getData('user');
+
     const payload = {
       ClaimID: claimData?.ClaimID || 0,
       CompanyID: getUserData?.CompanyID,
       ClaimUserID: getUserData?.LoginUserID,
-      // ClaimUserID: companyUserId,
       SubmittedToID: companyUserId,
       ClaimDate: dayjs(date).format('YYYY-MM-DD'),
       ClaimTypeID: expenseType,
@@ -176,16 +275,44 @@ const AddClaimScreen = ({route, navigation}) => {
       ClaimStatusID: claimStatusId || 1,
       AppUserID: getUserData?.LoginUserID,
     };
-    console.log('UpdateClaimspayload', payload);
+
+    console.log('UpdateClaimsPayload', payload);
     const response = await dispatch(UpdateClaimsThunk({payload}));
     console.log('UpdateClaimsRes', response);
-    if (response?.meta?.requestStatus === 'fulfilled') {
-      if (payload.ClaimID === 0) {
-        // New claim added
-        Alert.alert('Success', 'Claim saved successfully.');
+
+    if (
+      response?.meta?.requestStatus === 'fulfilled' &&
+      response?.payload?.ClaimID
+    ) {
+      const newClaimID = response.payload.ClaimID;
+
+      if (file && newClaimID !== 0) {
+        const formData = new FormData();
+        formData.append('ClaimID', newClaimID);
+        formData.append('ClaimDocumentID', 0);
+        formData.append('LoginUserID', getUserData?.LoginUserID);
+        formData.append('files', {
+          uri:
+            Platform.OS === 'android'
+              ? file.uri.replace('file://', '')
+              : file.uri,
+          name: file.name,
+          type: file.type || 'application/octet-stream',
+        });
+
+        console.log('Uploading file with ClaimID:', newClaimID, formData);
+        const uploadResponse = await dispatch(
+          UploadClaimDocumentThunk({payload: formData}),
+        );
+        console.log('Document response', uploadResponse);
+
+        if (uploadResponse?.meta?.requestStatus === 'fulfilled') {
+          Alert.alert('Success', 'Claim and file uploaded successfully.');
+        } else {
+          Alert.alert('Error', 'Claim saved but file upload failed.');
+        }
       } else {
-        // Claim updated
-        Alert.alert('Success', 'Claim updated successfully.');
+        Alert.alert('Success', 'Claim saved successfully.');
       }
       resetForm();
       navigation.goBack();
@@ -209,10 +336,48 @@ const AddClaimScreen = ({route, navigation}) => {
         type: [DocumentPicker.types.allFiles],
       });
       setFile(result);
+      console.log('Selected File:', result);
     } catch (err) {
       if (!DocumentPicker.isCancel(err)) {
         console.error('File picker error:', err);
       }
+    }
+  };
+
+  const UploadDocumentData = async () => {
+    if (!file) {
+      Alert.alert('Error', 'Please select a file to upload.');
+      return;
+    }
+
+    // File Upload First
+    const getUserData = await getData('userData');
+
+    const formData = new FormData();
+    // formData.append('ClaimID', 2);
+    formData.append('ClaimID', 89);
+    formData.append('ClaimDocumentID', 0);
+    formData.append('LoginUserID', getUserData?.LoginUserID);
+    formData.append('files', {
+      // uri: file.uri,
+      // uri: file.uri.replace('file://', ''),
+      uri:
+        Platform.OS === 'android' ? file.uri.replace('file://', '') : file.uri,
+      name: file.name,
+      type: file.type || 'application/octet-stream',
+    });
+
+    console.log('Uploading file...', formData);
+
+    const uploadResponse = await dispatch(
+      UploadClaimDocumentThunk({payload: formData}),
+    );
+    console.log('document response', uploadResponse);
+
+    if (uploadResponse?.meta?.requestStatus === 'fulfilled') {
+      Alert.alert('Success', 'File uploaded successfully.');
+    } else {
+      Alert.alert('Error', 'File upload failed. Please try again.');
     }
   };
 
@@ -367,8 +532,47 @@ const AddClaimScreen = ({route, navigation}) => {
                 </View>
               )}
 
-              {/* Claim Status Dropdown */}
-              {/* {claimData && (
+              {/* File Upload */}
+              <TouchableOpacity
+                onPress={pickFile}
+                style={styles.inputContainer}>
+                <Text style={styles.label}>File Upload</Text>
+                <Text style={styles.inputText}>
+                  {file ? file.name : 'Select a file (image or document)'}
+                </Text>
+                {/* <Text style={styles.noteText}>
+                  Note: First, add/update claims, and then upload the document.
+                </Text> */}
+              </TouchableOpacity>
+
+              {/* Buttons */}
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[styles.button, styles.cancelButton]}
+                  onPress={() => navigation.goBack()}>
+                  <Text style={styles.buttonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.button, styles.submitButton]}
+                  onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Submit</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default AddClaimScreen;
+
+{
+  /* Claim Status Dropdown */
+}
+{
+  /* {claimData && (
                 <View style={styles.inputContainer}>
                   <Text style={styles.label}>Claim Status</Text>
                   {claimStatusId ===
@@ -403,37 +607,5 @@ const AddClaimScreen = ({route, navigation}) => {
                     />
                   )}
                 </View>
-              )} */}
-
-              {/* File Upload */}
-              <TouchableOpacity
-                onPress={pickFile}
-                style={styles.inputContainer}>
-                <Text style={styles.label}>File Upload</Text>
-                <Text style={styles.inputText}>
-                  {file ? file.name : 'Select a file (image or document)'}
-                </Text>
-              </TouchableOpacity>
-
-              {/* Buttons */}
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={[styles.button, styles.cancelButton]}
-                  onPress={() => navigation.goBack()}>
-                  <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.button, styles.submitButton]}
-                  onPress={handleSubmit}>
-                  <Text style={styles.buttonText}>Submit</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </View>
-    </SafeAreaView>
-  );
-};
-
-export default AddClaimScreen;
+              )} */
+}

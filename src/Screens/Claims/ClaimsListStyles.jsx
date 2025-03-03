@@ -156,7 +156,13 @@ export const styles = StyleSheet.create({
   disabledButton: {
     backgroundColor: '#E0E0E0',
   },
-
+  dlodButton: {
+    backgroundColor: '#4d5154',
+    borderRadius: 10,
+    // padding: 8,
+    padding: responsiveWidth(2),
+    elevation: 4,
+  },
   // ---------
   addclaimContainer: {
     width: '100%',
@@ -329,3 +335,386 @@ export const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
 });
+
+
+  // const requestStoragePermission = async () => {
+  //   if (Platform.OS === 'android' && Platform.Version < 30) {
+  //     // Only needed for Android 9 or lower
+  //     try {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+  //         {
+  //           title: 'Storage Permission Required',
+  //           message: 'This app needs access to your storage to download files.',
+  //           buttonPositive: 'OK',
+  //         },
+  //       );
+  //       return granted === PermissionsAndroid.RESULTS.GRANTED;
+  //     } catch (err) {
+  //       console.warn(err);
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // };
+
+  // // const downloadDocument = async () => {
+  // //   if (!selectedClaim) {
+  // //     Alert.alert('Error', 'No claim selected for download.');
+  // //     return;
+  // //   }
+
+  // //   try {
+  // //     const hasPermission = await requestStoragePermission();
+  // //     if (!hasPermission) {
+  // //       Alert.alert(
+  // //         'Permission Denied',
+  // //         'Storage permission is required to download files.',
+  // //       );
+  // //       return;
+  // //     }
+
+  // //     const getUserData = await getData('userData');
+  // //     const LoginUserID = getUserData?.LoginUserID;
+
+  // //     const payload = {
+  // //       ClaimID: 89,
+  // //       ClaimDocumentID: 0,
+  // //       LoginUserID: LoginUserID,
+  // //     };
+
+  // //     console.log('Download Payload:', payload);
+
+  // //     // Dispatching the action to download file
+  // //     const response = await dispatch(DownloadClaimDocumentThunk({payload}));
+
+  // //     if (response?.payload?.fileUrl) {
+  // //       const fileUrl = response.payload.fileUrl; // Ensure API returns a valid file URL
+  // //       const fileName = `claim_${selectedClaim.ClaimID}.pdf`; // Adjust based on file type
+
+  // //       const downloadDest = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+  // //       console.log('Downloading to:', downloadDest);
+
+  // //       const downloadOptions = {
+  // //         fromUrl: fileUrl,
+  // //         toFile: downloadDest,
+  // //         background: true,
+  // //         progress: res => {
+  // //           const progressPercent =
+  // //             (res.bytesWritten / res.contentLength) * 100;
+  // //           console.log(`Download Progress: ${progressPercent.toFixed(2)}%`);
+  // //         },
+  // //       };
+
+  // //       const downloadResult = await RNFS.downloadFile(downloadOptions).promise;
+
+  // //       if (downloadResult.statusCode === 200) {
+  // //         Alert.alert('Success', `File downloaded to ${downloadDest}`);
+  // //       } else {
+  // //         Alert.alert('Error', 'File download failed.');
+  // //       }
+  // //     } else {
+  // //       Alert.alert('Error', 'Invalid file URL received.');
+  // //     }
+  // //   } catch (error) {
+  // //     console.error('Download Error:', error);
+  // //     Alert.alert('Error', 'Failed to download document.');
+  // //   }
+  // // };
+
+  // const downloadDocument = async () => {
+  //   if (!selectedClaim) {
+  //     Alert.alert('Error', 'No claim selected for download.');
+  //     return;
+  //   }
+
+  //   try {
+  //     const hasPermission = await requestStoragePermission();
+  //     if (!hasPermission) {
+  //       Alert.alert(
+  //         'Permission Denied',
+  //         'Storage permission is required to download files.',
+  //       );
+  //       return;
+  //     }
+
+  //     const getUserData = await getData('userData');
+  //     const LoginUserID = getUserData?.LoginUserID;
+
+  //     const payload = {
+  //       ClaimID: 89, // Possible typo: should it be "ClaimID"?
+  //       ClaimDocumentID: 0,
+  //       LoginUserID: LoginUserID,
+  //     };
+
+  //     console.log('Download Payload:', payload);
+
+  //     const response = await dispatch(DownloadClaimDocumentThunk({payload}));
+
+  //     if (response?.payload) {
+  //       // Convert blob to base64
+  //       const reader = new FileReader();
+  //       reader.onloadend = async () => {
+  //         const base64data = reader.result.split(',')[1];
+
+  //         // Define the file path
+  //         const downloadDir =
+  //           Platform.OS === 'android'
+  //             ? RNFS.DownloadDirectoryPath
+  //             : RNFS.DocumentDirectoryPath;
+  //         const filePath = `${downloadDir}/downloaded_file.png`;
+
+  //         await RNFS.writeFile(filePath, base64data, 'base64');
+
+  //         Alert.alert('Success', `File downloaded to: ${filePath}`);
+  //       };
+
+  //       reader.readAsDataURL(response.payload);
+  //     } else {
+  //       Alert.alert('Error', 'File download failed.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Download Error:', error);
+  //     Alert.alert('Error', 'Failed to download document.');
+  //   }
+  // };
+
+
+  // const handleDownloadFile = async () => {
+  
+    //   try {
+    //     // Request permission for Android devices
+    //     if (Platform.OS === 'android') {
+    //       const granted = await PermissionsAndroid.request(
+    //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+    //       );
+    //       if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+    //         Alert.alert(
+    //           'Permission Denied',
+    //           'Storage permission is required to download files.',
+    //         );
+    //         return;
+    //       }
+    //     }
+  
+    //     const getUserData = await getData('userData');
+    //     const LoginUserID = getUserData?.LoginUserID;
+  
+    //     const payload = {
+    //       ClaimID: 89, // Possible typo: should it be "ClaimID"?
+    //       ClaimDocumentID: 0,
+    //       LoginUserID: LoginUserID,
+    //     };
+    //     const filePath = await dispatch(
+    //       DownloadClaimDocumentThunk({payload}),
+    //     ).unwrap();
+  
+    //     Alert.alert('Download Complete', `File saved to: ${filePath}`);
+    //   } catch (error) {
+    //     Alert.alert('Download Failed', error.message);
+    //   }
+    // };
+
+
+      // const handleDownloadFile = async () => {
+      //   try {
+      //     const hasPermission = await requestStoragePermission();
+      //         if (!hasPermission) {
+      //           Alert.alert('Permission Denied', 'Storage permission is required.');
+      //           return;
+      //         }
+    
+      //     const getUserData = await getData('userData');
+      //     const LoginUserID = getUserData?.LoginUserID;
+    
+      //     const payload = {
+      //       ClaimID: 89,
+      //       ClaimDocumentID: 0,
+      //       LoginUserID: LoginUserID,
+      //     };
+    
+      //     const response = await dispatch(DownloadClaimDocumentThunk({payload}));
+    
+      //     if (response.payload) {
+      //       const blob = response.payload;
+    
+      //       // Convert blob to base64
+      //       const reader = new FileReader();
+      //       reader.readAsDataURL(blob);
+      //       reader.onloadend = async () => {
+      //         const base64Data = reader.result.split(',')[1];
+    
+      //         // Define file path
+      //         const path = `${RNFS.DocumentDirectoryPath}/downloaded_document.png`;
+    
+      //         // Write file
+      //         await RNFS.writeFile(path, base64Data, 'base64');
+    
+      //         Alert.alert('Success', 'File downloaded successfully.');
+    
+      //         console.log('File saved at:', path);
+      //       };
+      //     } else {
+      //       console.error('No file received');
+      //     }
+      //   } catch (error) {
+      //     console.error('File download error:', error);
+      //     Alert.alert('Error', 'File download failed.');
+      //   }
+      // };
+    
+      // const handleDownloadFile = async () => {
+      //   try {
+      //     const hasPermission = await requestStoragePermission();
+      //     if (!hasPermission) {
+      //       Alert.alert('Permission Denied', 'Storage permission is required.');
+      //       return;
+      //     }
+    
+      //     const getUserData = await getData('userData');
+      //     const LoginUserID = getUserData?.LoginUserID;
+    
+      //     const payload = {
+      //       ClaimID: 89,
+      //       ClaimDocumentID: 0,
+      //       LoginUserID: LoginUserID,
+      //     };
+    
+      //     const response = await dispatch(DownloadClaimDocumentThunk({ payload }));
+    
+      //     if (response.payload) {
+      //       const blob = response.payload;
+      //       const base64Data = await blobToBase64(blob); // Convert Blob to Base64
+    
+      //       const fileType = blob.type || 'application/pdf';
+      //       const extension = fileType.split('/')[1] || 'pdf';
+    
+      //       const fileName = `downloaded_document.${extension}`;
+      //       const path = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+    
+      //       await RNFS.writeFile(path, base64Data, 'base64');
+      //       Alert.alert('Download Complete', `File saved at: ${path}`);
+      //       console.log(`FileSavedLocation:${path}`)
+      //     } else {
+      //       console.error('No file received');
+      //     }
+      //   } catch (error) {
+      //     console.error('File download error:', error);
+      //     Alert.alert('Error', 'File download failed.');
+      //   }
+      // };
+    
+      // const handleDownloadFile = async () => {
+      //   try {
+      //     const hasPermission = await requestStoragePermission();
+      //     if (!hasPermission) {
+      //       Alert.alert('Permission Denied', 'Storage permission is required.');
+      //       return;
+      //     }
+    
+      //     const getUserData = await getData('userData');
+      //     const LoginUserID = getUserData?.LoginUserID;
+    
+      //     const payload = {
+      //       ClaimID: 89,
+      //       ClaimDocumentID: 0,
+      //       LoginUserID: LoginUserID,
+      //     };
+    
+      //     const response = await dispatch(DownloadClaimDocumentThunk({ payload }));
+    
+      //     if (response.payload) {
+      //       const blob = response.payload;
+    
+      //       // Convert Blob to Base64
+      //       const base64Data = await blobToBase64(blob);
+    
+      //       // Detect File Type and Extension
+      //       const fileType = blob.type || 'application/pdf'; // Default to PDF if unknown
+      //       const extension = fileType.split('/')[1] || 'pdf'; // Extract extension
+    
+      //       // Define File Name
+      //       const fileName = `downloaded_document.${extension}`;
+      //       const savePath = Platform.OS === 'ios'
+      //         ? `${RNFS.DocumentDirectoryPath}/${fileName}` // iOS storage
+      //         : `${RNFS.DownloadDirectoryPath}/${fileName}`; // Android storage
+    
+      //       // Save File to Storage
+      //       await RNFS.writeFile(savePath, base64Data, 'base64');
+    
+      //       Alert.alert('Download Complete', `File saved at: ${savePath}`);
+      //       console.log('File saved at:', savePath);
+      //     } else {
+      //       console.error('No file received');
+      //     }
+      //   } catch (error) {
+      //     console.error('File download error:', error);
+      //     Alert.alert('Error', 'File download failed.');
+      //   }
+      // };
+    
+      // const handleDownloadFile = async () => {
+      //   try {
+      //     //  Request Storage Permission (Android 13+)
+      //     const hasPermission = await requestStoragePermission();
+      //     if (!hasPermission) {
+      //       Alert.alert('Permission Denied', 'Storage permission is required.');
+      //       return;
+      //     }
+    
+      //     //  Fetch User Data
+      //     const getUserData = await getData('userData');
+      //     const LoginUserID = getUserData?.LoginUserID;
+    
+      //     const payload = {
+      //       ClaimID: 89,
+      //       ClaimDocumentID: 0,
+      //       LoginUserID: LoginUserID,
+      //     };
+    
+      //     //  Call API to Download File
+      //     const response = await dispatch(DownloadClaimDocumentThunk({ payload }));
+    
+      //     if (response.payload) {
+      //       const blob = response.payload;
+    
+      //       //  Extract File Name & Extension
+      //       let fileName = 'downloaded_file';
+      //       let extension = '';
+    
+      //       //  Check Content-Disposition Header (Best method)
+      //       const contentDisposition = response.meta?.headers?.['content-disposition'];
+      //       if (contentDisposition) {
+      //         const match = contentDisposition.match(/filename="(.+?)"/);
+      //         if (match) {
+      //           fileName = match[1]; // Use actual filename from API
+      //           extension = fileName.split('.').pop(); // Get file extension
+      //         }
+      //       }
+    
+      //       //  Fallback: Use MIME Type if No Filename
+      //       if (!extension) {
+      //         const fileType = blob.type || 'application/pdf'; // Default to PDF
+      //         extension = fileType.split('/')[1] || 'pdf';
+      //         fileName = `downloaded_file.${extension}`;
+      //       }
+    
+      //       //  Define Save Path (Android & iOS)
+      //       const path = `${RNFS.DownloadDirectoryPath}/${fileName}`;
+    
+      //       //  Convert Blob to Base64
+      //       const base64Data = await blobToBase64(blob);
+    
+      //       //  Write File
+      //       await RNFS.writeFile(path, base64Data, 'base64');
+    
+      //       Alert.alert('Download Complete', `File saved at: ${path}`);
+      //       console.log('File saved at:', path);
+      //     } else {
+      //       console.error('No file received');
+      //     }
+      //   } catch (error) {
+      //     console.error('File download error:', error);
+      //     Alert.alert('Error', 'File download failed.');
+      //   }
+      // };

@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.bgcolor,
     // width: Dimensions.get('window').width,
     // height: Dimensions.get('window').height,
-    width: responsiveWidth(100), 
+    width: responsiveWidth(100),
     height: responsiveHeight(100),
   },
 
@@ -30,33 +30,45 @@ export const styles = StyleSheet.create({
     elevation: 5,
   },
 
+  // headerContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   paddingHorizontal: 20,
+  //   position: 'relative',
+  // },
+
+  // logo: {
+  //   width: 100,
+  //   height: 35,
+  //   resizeMode: 'contain',
+  // },
+
+  // backButton: {
+  //   position: 'absolute',
+  //   right: 0,
+  //   padding: 10,
+  // },
+
+  // centerContainer: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
+
+  // ---------------header-----------
   headerContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    width: '100%',
+  },
+
+  logoContainer: {
+    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    position: 'relative',
-  },
-
-  backButton: {
-    position: 'absolute',
-    right: 0,
-    padding: 10,
-  },
-
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFF',
-    textTransform: 'uppercase',
-    letterSpacing: 1.2,
-    textAlign: 'center',
   },
 
   logo: {
@@ -64,6 +76,31 @@ export const styles = StyleSheet.create({
     height: 35,
     resizeMode: 'contain',
   },
+
+  companyNameContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  compName: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#fff',
+    textAlign: 'center',
+    letterSpacing: 0.8,
+    maxWidth: '80%', // Prevents overflow
+  },
+
+  backButton: {
+    // position: 'absolute',
+    // right: 0,
+    // padding: 10,
+    width: 50,
+    alignItems: 'flex-end',
+  },
+
+  // ----------------------------
 
   // Welcome Section Styling
   usernameSection: {
@@ -168,6 +205,12 @@ export const styles = StyleSheet.create({
     color: colors.white,
     textAlign: 'center',
   },
+  countTextBox: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.white,
+    textAlign: 'center',
+  },
 });
 
 // card: {
@@ -223,5 +266,3 @@ export const styles = StyleSheet.create({
 //   justifyContent: 'space-between',
 // },
 //}
-
-

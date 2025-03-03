@@ -5,11 +5,15 @@
 
 // new api urls
 //Live - production
-export const BASE_URL = 'http://218.208.86.107:8081/api/';
+// export const BASE_URL = 'http://218.208.86.107:8081/api/';
 // Test - development
-// export const BASE_URL = 'http://218.208.86.107:2021/api/';
+export const BASE_URL = 'http://218.208.86.107:2021/api/';
 
 export const LOGIN = BASE_URL + 'AppLogin';
+// document uplaod
+export const UPLOAD_CLAIM_DOCUMENT = BASE_URL + 'AppUploadClaimDocuments';
+export const DOWNLOAD_CLAIM_DOCUMENT = BASE_URL + 'AppDownloadClaimDocuments';
+
 // task list
 export const GET_TASK_STATUS = BASE_URL + 'AppGetTaskStatus';
 export const GET_CATEGORIES = BASE_URL + 'GetCategories';

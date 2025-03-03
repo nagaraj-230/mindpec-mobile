@@ -27,7 +27,7 @@ const CatogriesScreen = ({route, navigation}) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const getUserData = await getData('user');
+      const getUserData = await getData('userData');
       if (getUserData) {
         setUserNameState(getUserData.UserName);
       }
@@ -111,6 +111,7 @@ const CatogriesScreen = ({route, navigation}) => {
           keyExtractor={item => item.CategoryID.toString()}
           numColumns={2}
           columnWrapperStyle={styles.row}
+          removeClippedSubviews={false}
         />
       </View>
     </View>

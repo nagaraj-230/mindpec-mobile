@@ -26,8 +26,6 @@ import {GetClaimsThunk} from '../../Services/GetClaimsService/GetClaimsSlice';
 import {DashboardCountThunk} from '../../Services/DashBoardTaskCount/DashBoardCountSlice';
 
 const DashBoardScreen = ({route, navigation}) => {
-  const {userName} = route.params || {userName: ''}; // Retrieve userName from route params
-
   const dispatch = useDispatch();
   const {taskStatusData, isLoading} = useSelector(state => state.getTaskStatus);
   console.log('taskStatusData', taskStatusData);
@@ -42,7 +40,9 @@ const DashBoardScreen = ({route, navigation}) => {
   console.log('countData', countData);
   const [dashboardData, setDashboardData] = useState([]);
   // const [taskCounts, setTaskCounts] = useState({});
-  const [userNameState, setUserNameState] = useState(userName);
+  // username and company name display
+  const [userNameState, setUserNameState] = useState('');
+  const [selectedCompany, setSelectedCompany] = useState('');
 
   const [taskCount, setTotalCount] = useState({});
   console.log('taskCount', taskCount);
@@ -67,12 +67,14 @@ const DashBoardScreen = ({route, navigation}) => {
     }
   }, [countData]);
 
+  // getUserName from AsyncStorage
   useEffect(() => {
     const fetchUserData = async () => {
-      const getUserData = await getData('user');
-      // console.log('getUserData:', getUserData);
+      const getUserData = await getData('userData');
+      console.log('getUserData:', getUserData.CompanyName);
       if (getUserData) {
         setUserNameState(getUserData.UserName); // Set userName from stored data
+        setSelectedCompany(getUserData.CompanyName); // Store Company Name
       }
     };
 
@@ -89,7 +91,7 @@ const DashBoardScreen = ({route, navigation}) => {
       backAction,
     );
 
-    return () => backHandler.remove(); 
+    return () => backHandler.remove();
   }, []);
 
   useEffect(() => {
@@ -101,9 +103,10 @@ const DashBoardScreen = ({route, navigation}) => {
   }, []);
 
   const getTaskStatusList = async () => {
-    const getUserData = await getData('user');
-    // console.log('getUserData:', getUserData);
+    const getUserData = await getData('userData');
+    console.log('getUserData:', getUserData);
     const LoginUserID = getUserData?.LoginUserID;
+    console.log('LoginUserID--->', getUserData?.LoginUserID);
     // const token = await getData('token');
     // console.log('Token:', token);
 
@@ -119,7 +122,7 @@ const DashBoardScreen = ({route, navigation}) => {
   };
 
   const fetchDashboardCount = async () => {
-    const getUserData = await getData('user');
+    const getUserData = await getData('userData');
     // console.log('getUserData:', getUserData);
     const LoginUserID = getUserData?.LoginUserID;
     const payload = {AppUserID: LoginUserID, CategoryID: 1, TaskStatusID: 0};
@@ -131,7 +134,7 @@ const DashBoardScreen = ({route, navigation}) => {
 
   const getTasksList = async () => {
     setIsLoading(true);
-    const getUserData = await getData('user');
+    const getUserData = await getData('userData');
     const LoginUserID = getUserData?.LoginUserID;
     const CompanyID = getUserData?.CompanyID;
 
@@ -149,7 +152,7 @@ const DashBoardScreen = ({route, navigation}) => {
   };
 
   const fetchClaims = async () => {
-    const userData = await getData('user');
+    const userData = await getData('userData');
     const payload = {
       ClaimID: 0,
       CompanyID: userData?.CompanyID,
@@ -162,23 +165,38 @@ const DashBoardScreen = ({route, navigation}) => {
     const response = await dispatch(GetClaimsThunk({payload}));
     // console.log('GetClaimsThunkResponse',response)
   };
-
   const iconMapping = {
-    1: {icon: 'edit', color: '#FFA500'},
-    2: {icon: 'hourglass-empty', color: '#1E90FF'},
-    3: {icon: 'folder', color: '#FF8C00'},
-    4: {icon: 'check-circle', color: '#32CD32'},
-    5: {icon: 'search', color: '#6A5ACD'},
-    6: {icon: 'priority-high', color: '#6A5ACD'},
+    1: { color: '#FF5733' },
+    2: { color: '#33FF57' },
+    3: { color: '#5733FF' },
+    4: { color: '#FF33A1' },
+    5: { color: '#33A1FF' },
+    6: { color: '#A133FF' },
+    7: { color: '#D2691E' },
+    8: { color: '#FF4500' },
+    9: { color: '#32CD32' },
+    10: { color: '#8A2BE2' },
+    11: { color: '#DC143C' },
+    12: { color: '#00CED1' },
+    13: { color: '#20B2AA' },
+    14: { color: '#FF8C00' },
+    15: { color: '#B22222' },
+    16: { color: '#2E8B57' },
+    17: { color: '#6A5ACD' },
+    18: { color: '#FF6347' },
+    19: { color: '#4682B4' },
+    20: { color: '#D2691E' },
   };
-
+  
   const updatedTaskStatusData = [
     // ...(dashboardData || []),
     ...(dashboardData || []).filter(
-      item => item.TaskStatusName !== 'Hold' && item.TaskStatusName !== 'To Review for Mgmt'
+      item =>
+        item.TaskStatusName !== 'Hold' &&
+        item.TaskStatusName !== 'To Review for Mgmt',
     ),
     {
-      TaskStatusID: 7,
+      TaskStatusID: 100,
       TaskStatusName: 'Claims',
       icon: 'attach-money',
       color: '#FF4500',
@@ -186,7 +204,7 @@ const DashBoardScreen = ({route, navigation}) => {
   ];
 
   const handleCardPress = (id, title) => {
-    if (id === 7) {
+    if (id === 100) {
       navigation.navigate('claims');
     } else {
       navigation.navigate('tasklistscreen', {
@@ -215,20 +233,34 @@ const DashBoardScreen = ({route, navigation}) => {
           ) : (
             <>
               {/* Custom Header */}
+
               <LinearGradient
                 colors={['#FF6A00', '#FF9500']}
                 style={styles.gradientHeader}
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 0}}>
                 <View style={styles.headerContainer}>
+                  {/* Left Logo */}
+                  <View style={styles.logoContainer}>
+                    <Image source={images.logo} style={styles.logo} />
+                  </View>
+
+                  {/* Company Name (Centered) */}
+                  <View style={styles.companyNameContainer}>
+                    <Text
+                      style={styles.compName}
+                      numberOfLines={1}
+                      ellipsizeMode="tail">
+                      {selectedCompany}
+                    </Text>
+                  </View>
+
+                  {/* Logout Button (Right) */}
                   <TouchableOpacity
                     onPress={handleLogout}
                     style={styles.backButton}>
-                    <Icon name={'logout'} size={24} color={colors.white} />
+                    <Icon name="logout" size={24} color={colors.white} />
                   </TouchableOpacity>
-                  <View style={styles.centerContainer}>
-                    <Image source={images.logo} style={styles.logo} />
-                  </View>
                 </View>
               </LinearGradient>
 
@@ -259,17 +291,17 @@ const DashBoardScreen = ({route, navigation}) => {
                           )
                         }
                         activeOpacity={0.9}>
+                      
                         {/* Count Badge */}
-                     
-                        <View style={styles.countBadge}>
+                        {/* <View style={styles.countBadge}>
                           <Text style={styles.countText}>
-                            {item.TaskStatusID === 7
+                            {item.TaskStatusID === 100
                               ? totalClaims
                               : taskCount[`ID${item.TaskStatusID}`] || 0}
                           </Text>
-                        </View>
+                        </View> */}
+                       
                         {/* Task Name */}
-
                         <Text
                           style={styles.cardText}
                           numberOfLines={2}
@@ -283,7 +315,12 @@ const DashBoardScreen = ({route, navigation}) => {
                             styles.iconContainer,
                             {backgroundColor: color},
                           ]}>
-                          <Icon name={icon} size={24} color={colors.white} />
+                             <Text style={styles.countTextBox}>
+                            {item.TaskStatusID === 100
+                              ? totalClaims
+                              : taskCount[`ID${item.TaskStatusID}`] || 0}
+                          </Text>
+                          {/* <Icon name={icon} size={24} color={colors.white} /> */}
                         </View>
                       </TouchableOpacity>
                     );
@@ -292,6 +329,7 @@ const DashBoardScreen = ({route, navigation}) => {
                   numColumns={2}
                   columnWrapperStyle={styles.row}
                   showsVerticalScrollIndicator={false}
+                  removeClippedSubviews={false}
                 />
               </View>
             </>
@@ -303,85 +341,3 @@ const DashBoardScreen = ({route, navigation}) => {
 };
 
 export default DashBoardScreen;
-
-   {/* {count !== null && (
-                          <View style={styles.countBadge}>
-                            {item.TaskStatusID === 7 ? (
-                              // Show totalClaims for Claims card
-                              <Text style={styles.countText}>
-                                {totalClaims}
-                              </Text>
-                            ) : (
-                              // <Text style={styles.countText}>{1}</Text>
-                              // Show count for other cards
-                              <Text style={styles.countText}>{count}</Text>
-                              // <Text style={styles.countText}>{1}</Text>
-                            )}
-                          </View>
-                        )} */}
-// renderItem={({item}) => {
-//   const count = taskCounts[item.TaskStatusID];
-
-//   return (
-//     <TouchableOpacity
-//       style={styles.card}
-//       onPress={() =>
-//         handleCardPress(item.TaskStatusID, item.TaskStatusName)
-//       }
-//       activeOpacity={0.9}>
-//       {/* Task Name */}
-//       <Text style={styles.taskText}>{item.TaskStatusName}</Text>
-
-//       {/* Task Count with Counter Box */}
-//       {count !== null && (
-//         <View style={styles.countContainer}>
-//           <View style={styles.countBox}>
-//             <Text style={styles.countNumber}>
-//               {item.TaskStatusID === 7 ? totalClaims : count}
-//               {/* {count} */}
-//             </Text>
-//           </View>
-//         </View>
-//       )}
-//     </TouchableOpacity>
-//   );
-// }}
-
-// renderItem={({item}) => {
-//   // const {icon, color} = iconMapping[item.TaskStatusID] || {
-//   //   icon: item.icon,
-//   //   color: item.color,
-//   // };
-//   const count = taskCounts[item.TaskStatusID]; // Get count for each status
-
-//   return (
-//     <TouchableOpacity
-//       style={styles.card}
-//       onPress={() =>
-//         handleCardPress(item.TaskStatusID, item.TaskStatusName)
-//       }
-//       activeOpacity={0.9}>
-//       {/* Count Badge */}
-//       {count !== null && (
-//         <View style={styles.countBadge}>
-// {item.TaskStatusID === 7 ? (
-//   // Show totalClaims for Claims card
-//   <Text style={styles.countText}>{totalClaims}</Text>
-// ) : (
-//   // Show count for other cards
-//   <Text style={styles.countText}>{count}</Text>
-// )}
-//         </View>
-//       )}
-
-//       {/* Task Name */}
-//       <Text style={styles.cardText}>{item.TaskStatusName}</Text>
-
-//       {/* Icon */}
-//       {/* <View
-//         style={[styles.iconContainer, {backgroundColor: color}]}>
-//         <Icon name={icon} size={24} color={colors.white} />
-//       </View>  */}
-//     </TouchableOpacity>
-//   );
-// }}

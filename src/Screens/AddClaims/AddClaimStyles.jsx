@@ -67,6 +67,13 @@ export const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 5,
   },
+  noteText: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: 'red',
+    marginTop: 5,
+    marginBottom: 10,
+  },
   input: {
     borderWidth: 1,
     borderColor: '#4D5154',
