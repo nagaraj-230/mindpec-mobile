@@ -157,37 +157,3 @@ export const styles = StyleSheet.create({
 
   // task
 });
-
-// const {
-//     taskName: initialTaskName,
-//     clientName: initialClientName,
-//     description: initialDescription,
-//     startDate: initialStartDate,
-//     endDate: initialEndDate,
-//     priority: initialPriority,
-//     targetValue: initialTargetValue,
-//     achievedValue: initialAchievedValue,
-//     assignedDate: initialAssignedDate,
-//   } = route.params || {
-//     taskName: 'Development',
-//     clientName: 'infoline group solutions',
-//     description: 'Task Creation',
-//     startDate: '2024-12-02',
-//     endDate: '2024-12-06',
-//     priority: 'High',
-//     targetValue: '10 $',
-//     achievedValue: '7.5 $',
-//     assignedDate: '2024-12-02',
-//   };
-
-// console.log('Updated Data:', {
-//   taskName,
-//   clientName,
-//   description,
-//   startDate,
-//   endDate,
-//   priority,
-//   targetValue,
-//   achievedValue,
-//   creationDate,
-// });
